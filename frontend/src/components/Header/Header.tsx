@@ -1,0 +1,35 @@
+import React from 'react';
+import './Header.css';
+import {Quit, WindowMinimise} from "../../../wailsjs/runtime";
+
+const Header = () => {
+    return (
+        <div className="window-controls">
+            <button
+                className="window-control window-control-minimize"
+                onClick={WindowMinimise}
+                aria-label="Свернуть окно"
+                title="Свернуть"
+            >
+                <svg className="window-control-icon" viewBox="0 0 10 10">
+                    <rect x="1" y="4.5" width="8" height="1" fill="currentColor"/>
+                </svg>
+            </button>
+            <button
+                className="window-control window-control-close"
+                onClick={Quit}
+                aria-label="Закрыть приложение"
+                title="Закрыть"
+            >
+                <svg className="window-control-icon" viewBox="0 0 10 10">
+                    <path
+                        d="M1.70711 0.292893C1.31658 -0.0976311 0.683417 -0.0976311 0.292893 0.292893C-0.0976311 0.683417 -0.0976311 1.31658 0.292893 1.70711L3.58579 5L0.292893 8.29289C-0.0976311 8.68342 -0.0976311 9.31658 0.292893 9.70711C0.683417 10.0976 1.31658 10.0976 1.70711 9.70711L5 6.41421L8.29289 9.70711C8.68342 10.0976 9.31658 10.0976 9.70711 9.70711C10.0976 9.31658 10.0976 8.68342 9.70711 8.29289L6.41421 5L9.70711 1.70711C10.0976 1.31658 10.0976 0.683417 9.70711 0.292893C9.31658 -0.0976311 8.68342 -0.0976311 8.29289 0.292893L5 3.58579L1.70711 0.292893Z"
+                        fill="currentColor"
+                    />
+                </svg>
+            </button>
+        </div>
+    );
+};
+
+export default Header;

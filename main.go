@@ -1,0 +1,71 @@
+package main
+
+import (
+	"embed"
+	"fmt"
+	"os"
+
+	"github.com/wailsapp/wails/v2"
+	"github.com/wailsapp/wails/v2/pkg/options"
+	"github.com/wailsapp/wails/v2/pkg/options/assetserver"
+	"github.com/wailsapp/wails/v2/pkg/options/linux"
+	"github.com/wailsapp/wails/v2/pkg/options/mac"
+	"github.com/wailsapp/wails/v2/pkg/options/windows"
+)
+
+//go:embed all:frontend/dist
+var assets embed.FS
+
+func main() {
+	app := NewApp()
+
+	var width int
+	var height int
+
+	if StartPage == "update" {
+		width = 800
+		height = 500
+	} else {
+		width = 1200
+		height = 720
+	}
+
+	err := wails.Run(&options.App{
+		Title:         "AzoriumLauncher",
+		DisableResize: true,
+		Width:         width,
+		Frameless:     true,
+		Height:        height,
+		AssetServer: &assetserver.Options{
+			Assets: assets,
+		},
+		BackgroundColour: &options.RGBA{R: 0, G: 0, B: 0, A: 0},
+		Windows: &windows.Options{
+			WebviewUserDataPath:               fmt.Sprintf("C:\\Users\\%s\\AppData\\Roaming\\AzoriumLauncher", os.Getenv("USERNAME")),
+			WebviewIsTransparent:              true,
+			WindowIsTranslucent:               true,
+			BackdropType:                      windows.None,
+			DisableFramelessWindowDecorations: true,
+		},
+		Mac: &mac.Options{
+			TitleBar:             mac.TitleBarHidden(),
+			WebviewIsTransparent: true,
+			WindowIsTranslucent:  true,
+		},
+		Linux: &linux.Options{
+			WindowIsTranslucent: true,
+			WebviewGpuPolicy:    linux.WebviewGpuPolicyNever,
+		},
+		OnStartup: app.startup,
+		Bind: []interface{}{
+			app,
+		},
+		//Debug: options.Debug{
+		//	OpenInspectorOnStartup: true,
+		//},
+	})
+
+	if err != nil {
+		println("Error:", err.Error())
+	}
+}

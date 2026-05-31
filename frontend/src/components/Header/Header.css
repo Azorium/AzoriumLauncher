@@ -1,0 +1,39 @@
+.window-controls {
+    display: flex;
+    gap: 8px;
+    padding: 12px;
+    position: fixed;
+    top: 0;
+    right: 0;
+    z-index: 1000;
+    -webkit-app-region: no-drag;
+}
+
+.window-control {
+    background: rgba(255, 255, 255, 0.09);
+    border: none;
+    border-radius: 35%;
+    width: 38px;
+    height: 38px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.05s ease;
+    color: rgba(255, 255, 255, 0.8);
+}
+
+.window-control:hover {
+    background: rgba(255, 255, 255, 0.15);
+    color: white;
+}
+
+.window-control-close:hover {
+    background: rgba(255, 80, 80, 0.8);
+    color: white;
+}
+
+.window-control-icon {
+    width: 12px;
+    height: 12px;
+}
