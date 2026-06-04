@@ -16,9 +16,6 @@ import (
 
 type LauncherUpdate struct{}
 
-var launcherUpdateUrl = "http://localhost:8080/update/launcher"
-var launcherCheckUpdateUrl = "http://localhost:8080/update/launcher/check"
-
 func (u *LauncherUpdate) DownloadLauncher(ctx context.Context) {
 	systemInfo := systemUtils.GetSystemInfo()
 	osInfo := systemInfo.OS + "-" + systemInfo.Architecture
@@ -32,7 +29,7 @@ func (u *LauncherUpdate) DownloadLauncher(ctx context.Context) {
 	bodyBytes, _ := json.Marshal(body)
 
 	stage := utils.SetCurrentStage{Stage: "Установка обновлений", ShowProgress: true}
-	bytes := fileUtils.DownloadBytesWithProgress(ctx, launcherUpdateUrl, stage, "POST", bodyBytes)
+	bytes := fileUtils.DownloadBytesWithProgress(ctx, src.LauncherUpdateUrl, stage, "POST", bodyBytes)
 
 	stage = utils.SetCurrentStage{Stage: "Обновление лаунчера", ShowProgress: false}
 	runtime.EventsEmit(ctx, "setCurrentStage", stage)
@@ -61,7 +58,7 @@ func (u *LauncherUpdate) DownloadLauncher(ctx context.Context) {
 }
 
 func (u *LauncherUpdate) CheckUpdate(hash string) (bool, error) {
-	req, _ := http.NewRequest("POST", launcherCheckUpdateUrl, strings.NewReader(hash))
+	req, _ := http.NewRequest("POST", src.LauncherCheckUpdateUrl, strings.NewReader(hash))
 	req.Header.Set("Content-Type", "application/json")
 
 	client := &http.Client{}

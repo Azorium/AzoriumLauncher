@@ -19,11 +19,6 @@ import (
 )
 
 var systemUtils = utils.SystemUtils{}
-var clientsUrl = "http://localhost:8080/download/client/cached"
-var assetsUrl = "http://localhost:8080/download/caches/assets/"
-var javaUrl = "http://localhost:8080/download/updates/java/"
-var authlibUrl = "http://localhost:8080/download/updates/authlib-injector.jar"
-var gameFilesUpdateUrl = "http://localhost:8080/update/game_files"
 var authlibPath string
 var hashUtils = utils.HashUtils{}
 var zipUtils = utils.ZipUtils{}
@@ -109,7 +104,7 @@ func (c *ClientProcessesService) DownloadJava(ctx context.Context) {
 
 	if !fileUtils.Exist(javaPathForClient) {
 		stage := utils.SetCurrentStage{Stage: "Установка Java", ShowProgress: true}
-		bytes := fileUtils.DownloadBytesWithProgress(ctx, javaUrl+javaFolderName+".zip", stage, "GET", nil)
+		bytes := fileUtils.DownloadBytesWithProgress(ctx, src.JavaUrl+javaFolderName+".zip", stage, "GET", nil)
 
 		stage = utils.SetCurrentStage{Stage: "Обработка Java", ShowProgress: false}
 		runtime.EventsEmit(ctx, "setCurrentStage", stage)
@@ -125,7 +120,7 @@ func (c *ClientProcessesService) DownloadJava(ctx context.Context) {
 func (c *ClientProcessesService) DownloadAsset(ctx context.Context) {
 	if !fileUtils.Exist(filepath.Join(src.IndexesPath, c.Profile.McVersion+".json")) {
 		stage := utils.SetCurrentStage{Stage: "Установка ассетов", ShowProgress: true}
-		bytes := fileUtils.DownloadBytesWithProgress(ctx, assetsUrl+c.Profile.McVersion+".zip", stage, "GET", nil)
+		bytes := fileUtils.DownloadBytesWithProgress(ctx, src.AssetsUrl+c.Profile.McVersion+".zip", stage, "GET", nil)
 
 		stage = utils.SetCurrentStage{Stage: "Обработка ассетов", ShowProgress: false}
 		runtime.EventsEmit(ctx, "setCurrentStage", stage)
@@ -145,7 +140,7 @@ func (c *ClientProcessesService) DownloadAsset(ctx context.Context) {
 func (c *ClientProcessesService) DownloadClient(ctx context.Context) {
 	if !fileUtils.Exist(authlibPath) {
 		stage := utils.SetCurrentStage{Stage: "Подключение авторизации", ShowProgress: true}
-		bytes := fileUtils.DownloadBytesWithProgress(ctx, authlibUrl, stage, "GET", nil)
+		bytes := fileUtils.DownloadBytesWithProgress(ctx, src.AuthlibUrl, stage, "GET", nil)
 
 		os.Create(authlibPath)
 		os.WriteFile(authlibPath, bytes, 0775)
@@ -164,7 +159,7 @@ func (c *ClientProcessesService) DownloadClient(ctx context.Context) {
 
 		bodyBytes, _ := json.Marshal(body)
 
-		bytes := fileUtils.DownloadBytesWithProgress(ctx, clientsUrl, stage, "GET", bodyBytes)
+		bytes := fileUtils.DownloadBytesWithProgress(ctx, src.ClientsUrl, stage, "GET", bodyBytes)
 
 		stage = utils.SetCurrentStage{Stage: "Обработка Minecraft", ShowProgress: false}
 		runtime.EventsEmit(ctx, "setCurrentStage", stage)
@@ -193,7 +188,7 @@ func (c *ClientProcessesService) updateClient(ctx context.Context) {
 	jsonData, _ := json.Marshal(requestBody)
 
 	stage := utils.SetCurrentStage{Stage: "Обновление Minecraft", ShowProgress: true}
-	bytes := fileUtils.DownloadBytesWithProgress(ctx, gameFilesUpdateUrl, stage, "POST", jsonData)
+	bytes := fileUtils.DownloadBytesWithProgress(ctx, src.GameFilesUpdateUrl, stage, "POST", jsonData)
 
 	stage = utils.SetCurrentStage{Stage: "Обработка Minecraft", ShowProgress: false}
 	runtime.EventsEmit(ctx, "setCurrentStage", stage)
@@ -223,7 +218,7 @@ func (c *ClientProcessesService) updateAssets(ctx context.Context) {
 	jsonData, _ := json.Marshal(requestBody)
 
 	stage := utils.SetCurrentStage{Stage: "Обновление ассетов", ShowProgress: true}
-	bytes := fileUtils.DownloadBytesWithProgress(ctx, gameFilesUpdateUrl, stage, "POST", jsonData)
+	bytes := fileUtils.DownloadBytesWithProgress(ctx, src.GameFilesUpdateUrl, stage, "POST", jsonData)
 
 	stage = utils.SetCurrentStage{Stage: "Обработка ассетов", ShowProgress: false}
 	runtime.EventsEmit(ctx, "setCurrentStage", stage)

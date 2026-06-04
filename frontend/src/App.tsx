@@ -4,7 +4,6 @@ import {Profiles, ProfileSettings} from "./js/Interfaces";
 import {service} from "../wailsjs/go/models";
 import {BrowserRouter} from "react-router";
 import {Routers} from "./components/Routers";
-import ServerUnavailable from "./components/ServerUnavailable/ServerUnavailable";
 import SettingsObj = service.SettingsObj;
 
 const App = () => {

@@ -9,7 +9,16 @@ import (
 
 type Consts struct{}
 
-var DownloadUrl string
+var mainApiUrl = "http://localhost:8080"
+var DownloadUrl = mainApiUrl + "/download/"
+var ClientsUrl = mainApiUrl + "/download/client/cached"
+var AssetsUrl = mainApiUrl + "/download/caches/assets/"
+var JavaUrl = mainApiUrl + "/download/updates/java/"
+var AuthlibUrl = mainApiUrl + "/download/updates/authlib-injector.jar"
+var GameFilesUpdateUrl = mainApiUrl + "/update/game_files"
+var LauncherUpdateUrl = mainApiUrl + "/update/launcher"
+var LauncherCheckUpdateUrl = mainApiUrl + "/update/launcher/check"
+
 var RootPath string
 var TmpPath string
 var HashesPath string
@@ -24,6 +33,7 @@ var AssetsHashPath string
 var ClientsHashPath string
 var Hash string
 var Path string
+var User UserType
 
 type UserType struct {
 	Username string `json:"username"`
@@ -31,14 +41,10 @@ type UserType struct {
 	JWToken  string `json:"jwt_token"`
 }
 
-var User UserType
-
 func (c *Consts) LoadConsts() {
 	var osUtils = utils.SystemUtils{}
 	var hashUtils = utils.HashUtils{}
 	var homePath, _ = osUtils.GetUserHomeDir()
-
-	DownloadUrl = "http://localhost:8080/download/"
 
 	RootPath = filepath.Join(homePath, "AzoriumLauncher")
 
