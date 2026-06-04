@@ -6,6 +6,7 @@ declare global {
         profiles: Profiles;
         settings: Settings;
         rootPath: string;
+        projectName: string;
         __preloadedSkin: string;
         setCurrentStage: (stage: string) => void;
     }

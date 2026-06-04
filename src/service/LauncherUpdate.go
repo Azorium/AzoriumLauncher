@@ -1,8 +1,8 @@
 package service
 
 import (
-	"azoriumlauncher-prestarter/src"
-	"azoriumlauncher-prestarter/src/utils"
+	"azoriumlauncher/src"
+	"azoriumlauncher/src/utils"
 	"context"
 	"encoding/json"
 	"io"

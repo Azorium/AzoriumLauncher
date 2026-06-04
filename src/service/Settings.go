@@ -1,7 +1,7 @@
 package service
 
 import (
-	"azoriumlauncher-prestarter/src"
+	"azoriumlauncher/src"
 	"path/filepath"
 )
 

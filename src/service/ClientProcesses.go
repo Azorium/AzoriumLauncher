@@ -1,8 +1,8 @@
 package service
 
 import (
-	"azoriumlauncher-prestarter/src"
-	"azoriumlauncher-prestarter/src/utils"
+	"azoriumlauncher/src"
+	"azoriumlauncher/src/utils"
 	"bufio"
 	"context"
 	"encoding/json"
@@ -374,7 +374,7 @@ func (c *ClientProcessesService) MinecraftStart(ctx context.Context) {
 		jvmArgsValues["${version_name}"] = fmt.Sprintf("forge-%s-%s-client", c.Profile.McVersion, c.Profile.LoaderVersion)
 		jvmArgsValues["${library_directory}"] = filepath.Join(c.ClientPath, "libraries")
 		jvmArgsValues["${classpath_separator}"] = string(os.PathListSeparator)
-		jvmArgsValues["${launcher_name}"] = "AzoriumLauncher"
+		jvmArgsValues["${launcher_name}"] = src.ProjectName + "Launcher"
 		jvmArgsValues["${launcher_version}"] = "1.0.0"
 
 		for i, jvmArg := range jvmArgs {

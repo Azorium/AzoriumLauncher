@@ -1,9 +1,9 @@
 package main
 
 import (
-	"azoriumlauncher-prestarter/src"
-	"azoriumlauncher-prestarter/src/service"
-	"azoriumlauncher-prestarter/src/utils"
+	"azoriumlauncher/src"
+	"azoriumlauncher/src/service"
+	"azoriumlauncher/src/utils"
 	"context"
 	"fmt"
 	"os"
@@ -67,6 +67,10 @@ func (a *App) startup(ctx context.Context) {
 
 func (a *App) GetStartPage() string {
 	return StartPage
+}
+
+func (a *App) GetProjectName() string {
+	return src.ProjectName
 }
 
 func (a *App) OpenLauncherRootFolder() error {

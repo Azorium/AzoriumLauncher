@@ -79,7 +79,7 @@ const AuthPage = () => {
                 <div className="form-container">
                     <div className="form-wrapper">
                         <div className="form-header">
-                            <h1 className="app-title">Azorium</h1>
+                            <h1 className="app-title">{window.projectName}</h1>
                             <p className="app-subtitle">
                                 Войдите в свой аккаунт
                             </p>
@@ -130,7 +130,7 @@ const AuthPage = () => {
                         </form>
 
                         <div className="app-info">
-                            <p>AzoriumLauncher • 2026</p>
+                            <p>{window.projectName}Launcher • 2026</p>
                             <p>При появлении проблем пишите в Discord проекта</p>
                         </div>
                     </div>

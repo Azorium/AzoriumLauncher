@@ -5,6 +5,8 @@ import {src} from '../models';
 
 export function GetProfiles():Promise<Array<Record<string, any>>>;
 
+export function GetProjectName():Promise<string>;
+
 export function GetRootPath():Promise<string>;
 
 export function GetSettings():Promise<any>;

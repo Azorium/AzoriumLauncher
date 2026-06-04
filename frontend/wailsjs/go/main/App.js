@@ -6,6 +6,10 @@ export function GetProfiles() {
   return window['go']['main']['App']['GetProfiles']();
 }
 
+export function GetProjectName() {
+  return window['go']['main']['App']['GetProjectName']();
+}
+
 export function GetRootPath() {
   return window['go']['main']['App']['GetRootPath']();
 }

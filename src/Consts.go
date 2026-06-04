@@ -1,7 +1,7 @@
 package src
 
 import (
-	"azoriumlauncher-prestarter/src/utils"
+	"azoriumlauncher/src/utils"
 	"os"
 	"path/filepath"
 	"strings"
@@ -9,6 +9,7 @@ import (
 
 type Consts struct{}
 
+var ProjectName = "Azorium"
 var mainApiUrl = "http://localhost:8080"
 var DownloadUrl = mainApiUrl + "/download/"
 var ClientsUrl = mainApiUrl + "/download/client/cached"
@@ -46,12 +47,12 @@ func (c *Consts) LoadConsts() {
 	var hashUtils = utils.HashUtils{}
 	var homePath, _ = osUtils.GetUserHomeDir()
 
-	RootPath = filepath.Join(homePath, "AzoriumLauncher")
+	RootPath = filepath.Join(homePath, ProjectName+"Launcher")
 
 	if strings.Contains(osUtils.GetSystemInfo().OS, "win") {
-		RootPath = filepath.Join(homePath, "AppData", "Roaming", "AzoriumLauncher")
+		RootPath = filepath.Join(homePath, "AppData", "Roaming", ProjectName+"Launcher")
 	} else {
-		RootPath = filepath.Join(homePath, "AzoriumLauncher")
+		RootPath = filepath.Join(homePath, ProjectName+"Launcher")
 	}
 
 	TmpPath = filepath.Join(RootPath, "tmp")

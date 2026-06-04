@@ -1,6 +1,7 @@
 package main
 
 import (
+	"azoriumlauncher/src"
 	"embed"
 	"fmt"
 	"os"
@@ -31,7 +32,7 @@ func main() {
 	}
 
 	err := wails.Run(&options.App{
-		Title:         "AzoriumLauncher",
+		Title:         src.ProjectName + "Launcher",
 		DisableResize: true,
 		Width:         width,
 		Frameless:     true,
@@ -41,7 +42,7 @@ func main() {
 		},
 		BackgroundColour: &options.RGBA{R: 0, G: 0, B: 0, A: 0},
 		Windows: &windows.Options{
-			WebviewUserDataPath:               fmt.Sprintf("C:\\Users\\%s\\AppData\\Roaming\\AzoriumLauncher", os.Getenv("USERNAME")),
+			WebviewUserDataPath:               fmt.Sprintf("C:\\Users\\%s\\AppData\\Roaming\\%sLauncher", os.Getenv("USERNAME"), src.ProjectName),
 			WebviewIsTransparent:              true,
 			WindowIsTranslucent:               true,
 			BackdropType:                      windows.None,

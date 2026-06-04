@@ -1,4 +1,4 @@
-module azoriumlauncher-prestarter
+module azoriumlauncher
 
 go 1.23.0
 
