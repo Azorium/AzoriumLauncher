@@ -6,6 +6,7 @@ import {checkFetch} from "./js/utils/auth";
 import {GetStartPage} from "../wailsjs/go/main/App";
 import {LauncherUpdate} from "./components/LauncherUpdate/LauncherUpdate";
 import ServerUnavailable from "./components/ServerUnavailable/ServerUnavailable";
+import {LogInfo} from "../wailsjs/runtime";
 
 const container = document.getElementById('root')
 const root = createRoot(container!)

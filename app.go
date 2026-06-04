@@ -20,13 +20,14 @@ var clientProcessesService = service.ClientProcessesService{}
 var launcherUpdateService = service.LauncherUpdate{}
 var consts = src.Consts{}
 var StartPage string
+var isReachableServer bool
 
 type App struct {
 	ctx context.Context
 }
 
 func NewApp() *App {
-	consts.LoadConsts()
+	isReachableServer = consts.LoadConsts()
 	fileUtils.CreateFolder(src.RootPath)
 	fileUtils.CreateFolder(src.UpdatesPath)
 	fileUtils.CreateFolder(src.HashesPath)
@@ -38,8 +39,8 @@ func NewApp() *App {
 	fileUtils.CreateFolder(src.IndexesPath)
 	settingsService.CreateSettingsFile()
 
-	if update, err := launcherUpdateService.CheckUpdate(src.Hash); err == nil {
-		if update {
+	if isReachableServer {
+		if update := launcherUpdateService.CheckUpdate(src.Hash); update {
 			StartPage = "update"
 		} else {
 			StartPage = "main"
@@ -59,6 +60,10 @@ func (a *App) startup(ctx context.Context) {
 	a.ctx = ctx
 
 	if runtime.Environment(a.ctx).BuildType == "dev" {
+		if !isReachableServer {
+			return
+		}
+
 		StartPage = "main"
 		runtime.WindowSetSize(a.ctx, 1200, 720)
 		runtime.WindowCenter(a.ctx)

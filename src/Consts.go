@@ -5,20 +5,20 @@ import (
 	"os"
 	"path/filepath"
 	"strings"
+	"time"
 )
 
 type Consts struct{}
 
 var ProjectName = "Azorium"
-var mainApiUrl = "http://localhost:8080"
-var DownloadUrl = mainApiUrl + "/download/"
-var ClientsUrl = mainApiUrl + "/download/client/cached"
-var AssetsUrl = mainApiUrl + "/download/caches/assets/"
-var JavaUrl = mainApiUrl + "/download/updates/java/"
-var AuthlibUrl = mainApiUrl + "/download/updates/authlib-injector.jar"
-var GameFilesUpdateUrl = mainApiUrl + "/update/game_files"
-var LauncherUpdateUrl = mainApiUrl + "/update/launcher"
-var LauncherCheckUpdateUrl = mainApiUrl + "/update/launcher/check"
+var DownloadUrl string
+var ClientsUrl string
+var AssetsUrl string
+var JavaUrl string
+var AuthlibUrl string
+var GameFilesUpdateUrl string
+var LauncherUpdateUrl string
+var LauncherCheckUpdateUrl string
 
 var RootPath string
 var TmpPath string
@@ -42,7 +42,29 @@ type UserType struct {
 	JWToken  string `json:"jwt_token"`
 }
 
-func (c *Consts) LoadConsts() {
+func (c *Consts) LoadConsts() bool {
+	var mainApiUrl string
+	apiUrls := []string{"zxc.xz"}
+
+	for _, apiUrl := range apiUrls {
+		if isReachable := utils.IsReachableServer(apiUrl, 8080, 1*time.Second); isReachable {
+			mainApiUrl = "http://" + apiUrl + ":8080"
+		}
+	}
+
+	if !strings.HasPrefix(mainApiUrl, "http") {
+		return false
+	}
+
+	DownloadUrl = mainApiUrl + "/download/"
+	ClientsUrl = mainApiUrl + "/download/client/cached"
+	AssetsUrl = mainApiUrl + "/download/caches/assets/"
+	JavaUrl = mainApiUrl + "/download/updates/java/"
+	AuthlibUrl = mainApiUrl + "/download/updates/authlib-injector.jar"
+	GameFilesUpdateUrl = mainApiUrl + "/update/game_files"
+	LauncherUpdateUrl = mainApiUrl + "/update/launcher"
+	LauncherCheckUpdateUrl = mainApiUrl + "/update/launcher/check"
+
 	var osUtils = utils.SystemUtils{}
 	var hashUtils = utils.HashUtils{}
 	var homePath, _ = osUtils.GetUserHomeDir()
@@ -69,4 +91,6 @@ func (c *Consts) LoadConsts() {
 
 	Path, _ = os.Executable()
 	Hash, _ = hashUtils.Md5(Path)
+
+	return true
 }

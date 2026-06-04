@@ -57,14 +57,15 @@ func (u *LauncherUpdate) DownloadLauncher(ctx context.Context) {
 	runtime.Quit(ctx)
 }
 
-func (u *LauncherUpdate) CheckUpdate(hash string) (bool, error) {
+func (u *LauncherUpdate) CheckUpdate(hash string) bool {
 	req, _ := http.NewRequest("POST", src.LauncherCheckUpdateUrl, strings.NewReader(hash))
+
 	req.Header.Set("Content-Type", "application/json")
 
 	client := &http.Client{}
 	resp, err := client.Do(req)
 	if err != nil {
-		return false, err
+		return false
 	}
 	defer resp.Body.Close()
 
@@ -73,5 +74,5 @@ func (u *LauncherUpdate) CheckUpdate(hash string) (bool, error) {
 	var bodyVar bool
 	json.Unmarshal(body, &bodyVar)
 
-	return bodyVar, nil
+	return bodyVar
 }
