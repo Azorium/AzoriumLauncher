@@ -36,6 +36,7 @@ func NewApp() *App {
 		}
 	} else {
 		StartPage = "error"
+		return &App{}
 	}
 
 	fileUtils.CreateFolder(src.RootPath)
