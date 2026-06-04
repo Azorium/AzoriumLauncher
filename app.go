@@ -28,6 +28,16 @@ type App struct {
 
 func NewApp() *App {
 	isReachableServer = consts.LoadConsts()
+	if isReachableServer {
+		if update := launcherUpdateService.CheckUpdate(src.Hash); update {
+			StartPage = "update"
+		} else {
+			StartPage = "main"
+		}
+	} else {
+		StartPage = "error"
+	}
+
 	fileUtils.CreateFolder(src.RootPath)
 	fileUtils.CreateFolder(src.UpdatesPath)
 	fileUtils.CreateFolder(src.HashesPath)
@@ -38,16 +48,6 @@ func NewApp() *App {
 	fileUtils.CreateFolder(src.ObjectsPath)
 	fileUtils.CreateFolder(src.IndexesPath)
 	settingsService.CreateSettingsFile()
-
-	if isReachableServer {
-		if update := launcherUpdateService.CheckUpdate(src.Hash); update {
-			StartPage = "update"
-		} else {
-			StartPage = "main"
-		}
-	} else {
-		StartPage = "error"
-	}
 
 	return &App{}
 }

@@ -48,7 +48,13 @@ func (c *Consts) LoadConsts() bool {
 
 	for _, apiUrl := range apiUrls {
 		if isReachable := utils.IsReachableServer(apiUrl, 8080, 1*time.Second); isReachable {
-			mainApiUrl = "http://" + apiUrl + ":8080"
+			if strings.Contains(apiUrl, "localhost") {
+				mainApiUrl = "http://" + apiUrl + ":8080"
+				continue
+			}
+
+			mainApiUrl = "https://" + apiUrl
+			continue
 		}
 	}
 
