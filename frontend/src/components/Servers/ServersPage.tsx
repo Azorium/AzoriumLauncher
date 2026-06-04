@@ -16,23 +16,25 @@ const ServersPage = () => {
     useEffect(() => {
         async function fetchAllProfiles() {
             const promises = profiles.map(async (profile) => {
-                const host = profile.backend.ip;
-                const port = parseInt(profile.backend.port, 10);
-                const url = `https://api.mcstatus.io/v2/status/java/${host}:${port}`;
+                if (profile.maxOnline == undefined && profile.currentOnline == undefined) {
+                    const host = profile.backend.ip;
+                    const port = parseInt(profile.backend.port, 10);
+                    const url = `https://api.mcstatus.io/v2/status/java/${host}:${port}`;
 
-                try {
-                    const res = await fetch(url);
-                    if (!res.ok) {
-                        throw new Error(`HTTP ${res.status}`);
-                    }
-                    const data = await res.json();
+                    try {
+                        const res = await fetch(url);
+                        if (!res.ok) {
+                            profile.maxOnline = 0;
+                            profile.currentOnline = 0;
+                            throw new Error(`HTTP ${res.status}`);
+                        }
+                        const data = await res.json();
 
-                    if (data.online) {
                         profile.maxOnline = data.players.max;
                         profile.currentOnline = data.players.online;
+                    } catch (error) {
+                        console.error('Ошибка запроса:', error);
                     }
-                } catch (error) {
-                    console.error('Ошибка запроса:', error);
                 }
             });
 
