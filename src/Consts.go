@@ -58,7 +58,7 @@ func (c *Consts) LoadConsts() bool {
 		}
 	}
 
-	if !strings.HasPrefix(mainApiUrl, "http") {
+	if mainApiUrl == "" {
 		return false
 	}
 
