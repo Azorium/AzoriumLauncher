@@ -12,6 +12,8 @@ export interface User {
     coins: string;
     registrationDate: string;
     jwt_token: string;
+    skinHash: string;
+    capeHash: string;
 }
 
 export type Profiles = Profile[];

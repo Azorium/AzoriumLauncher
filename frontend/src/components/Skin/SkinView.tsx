@@ -24,10 +24,7 @@ export const SkinView: React.FC<SkinViewProps> = ({isSettingsPage}) => {
 
         const loadCape = async () => {
             try {
-                let res = await fetch(`${API_URL}/uploads/capes/${user.username}.png`);
-                if (res.status == 404) {
-                    res = await fetch(`${API_URL}/uploads/capes/${user.username}.gif`);
-                }
+                let res = await fetch(`${API_URL}/uploads/capes/${user.capeHash}.png`);
 
                 if (res.ok && viewer) viewer.loadCape(res.url).then();
             } catch (err) {
