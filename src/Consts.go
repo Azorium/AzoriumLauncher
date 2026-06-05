@@ -44,17 +44,17 @@ type UserType struct {
 
 func (c *Consts) LoadConsts() bool {
 	var mainApiUrl string
-	apiUrls := []string{"zxc.xz"}
+	apiUrls := []string{"zxc.xz", "localhost"}
 
 	for _, apiUrl := range apiUrls {
 		if isReachable := utils.IsReachableServer(apiUrl, 8080, 1*time.Second); isReachable {
 			if strings.Contains(apiUrl, "localhost") {
 				mainApiUrl = "http://" + apiUrl + ":8080"
-				continue
+				break
 			}
 
 			mainApiUrl = "https://" + apiUrl
-			continue
+			break
 		}
 	}
 
