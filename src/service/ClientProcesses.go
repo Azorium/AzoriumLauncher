@@ -176,7 +176,6 @@ func (c *ClientProcessesService) downloadComponent(ctx context.Context, path str
 	downloadStageText := fmt.Sprintf("Установка компонентов: Стадия %d", stageNum)
 
 	if !fileUtils.Exist(path) {
-		runtime.LogInfo(ctx, "zxc")
 		stage := utils.SetCurrentStage{Stage: downloadStageText, ShowProgress: true}
 		bytes := fileUtils.DownloadBytesWithProgress(ctx, src.DownloadUrl+"updates/"+fileName, stage, "GET", nil)
 
