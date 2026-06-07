@@ -21,6 +21,7 @@ var LauncherGuardUrl string
 var GameFilesUpdateUrl string
 var LauncherUpdateUrl string
 var LauncherCheckUpdateUrl string
+var YggdrasilApiUrl string
 
 var RootPath string
 var TmpPath string
@@ -33,11 +34,13 @@ var ObjectsPath string
 var JavaPath string
 var AssetsHashPath string
 var ClientsHashPath string
+var AuthlibPath string
+var LauncherGuardPath string
 
 var Hash string
 var Path string
 var User UserType
-var FileExtensions string
+var FileExtension string
 
 type UserType struct {
 	Username string `json:"username"`
@@ -67,7 +70,7 @@ func (c *Consts) LoadConsts() bool {
 	}
 
 	if strings.Contains(runtime.GOOS, "win") {
-		FileExtensions = ".exe"
+		FileExtension = ".exe"
 	}
 
 	DownloadUrl = mainApiUrl + "/download/"
@@ -79,6 +82,7 @@ func (c *Consts) LoadConsts() bool {
 	LauncherUpdateUrl = mainApiUrl + "/update/launcher"
 	LauncherGuardUrl = mainApiUrl + "/update/launcheguard"
 	LauncherCheckUpdateUrl = mainApiUrl + "/update/launcher/check"
+	YggdrasilApiUrl = mainApiUrl + "/api/auth/yggdrasil"
 
 	var osUtils = utils.SystemUtils{}
 	var hashUtils = utils.HashUtils{}
@@ -100,6 +104,8 @@ func (c *Consts) LoadConsts() bool {
 	AssetsPath = filepath.Join(ClientsPath, "assets")
 	IndexesPath = filepath.Join(AssetsPath, "indexes")
 	ObjectsPath = filepath.Join(AssetsPath, "objects")
+	AuthlibPath = filepath.Join(UpdatesPath, "authlib-injector.jar")
+	LauncherGuardPath = filepath.Join(UpdatesPath, "LauncherGuard"+FileExtension)
 
 	AssetsHashPath = filepath.Join(HashesPath, "assets.json")
 	ClientsHashPath = filepath.Join(HashesPath, "clients.json")

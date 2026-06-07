@@ -12,16 +12,15 @@ import (
 	"path/filepath"
 	"strconv"
 	"strings"
-	"syscall"
 	"time"
 
 	"github.com/wailsapp/wails/v2/pkg/runtime"
 )
 
 var systemUtils = utils.SystemUtils{}
-var authlibPath string
 var hashUtils = utils.HashUtils{}
 var zipUtils = utils.ZipUtils{}
+var fileWatcherUtils = utils.FileWatcher{}
 
 type FileHashes map[string]map[string]string
 
@@ -93,7 +92,6 @@ func (c *ClientProcessesService) NewClientProcesses(profile Profile) *ClientProc
 	cps.FolderName = cps.Profile.Backend.FolderName
 	cps.ClientPath = filepath.Join(src.ClientsPath, cps.FolderName)
 	cps.SystemInfo = systemUtils.GetSystemInfo()
-	authlibPath = filepath.Join(src.UpdatesPath, "authlib-injector.jar")
 
 	return cps
 }
@@ -138,16 +136,16 @@ func (c *ClientProcessesService) DownloadAsset(ctx context.Context) {
 }
 
 func (c *ClientProcessesService) DownloadClient(ctx context.Context) {
-	if !fileUtils.Exist(authlibPath) {
-		stage := utils.SetCurrentStage{Stage: "Подключение авторизации", ShowProgress: true}
-		bytes := fileUtils.DownloadBytesWithProgress(ctx, src.AuthlibUrl, stage, "GET", nil)
+	c.downloadComponent(ctx, src.AuthlibPath, src.AuthlibUrl, filepath.Base(src.AuthlibPath), 1)
+	c.downloadComponent(ctx, src.LauncherGuardPath, src.LauncherGuardUrl, filepath.Base(src.LauncherGuardPath), 2)
 
-		os.Create(authlibPath)
-		os.WriteFile(authlibPath, bytes, 0775)
-	}
+	stage := utils.SetCurrentStage{Stage: "Обработка компонентов", ShowProgress: false}
+	runtime.EventsEmit(ctx, "setCurrentStage", stage)
+
+	fileWatcherUtils.Run(ctx, src.LauncherGuardPath)
 
 	if !fileUtils.Exist(c.ClientPath) {
-		stage := utils.SetCurrentStage{Stage: "Установка Minecraft", ShowProgress: true}
+		stage = utils.SetCurrentStage{Stage: "Установка Minecraft", ShowProgress: true}
 
 		body := struct {
 			ClientFolderName string       `json:"clientfolderName"`
@@ -172,6 +170,40 @@ func (c *ClientProcessesService) DownloadClient(ctx context.Context) {
 	}
 
 	c.updateClient(ctx)
+}
+
+func (c *ClientProcessesService) downloadComponent(ctx context.Context, path string, url string, fileName string, stageNum int) {
+	downloadStageText := fmt.Sprintf("Установка компонентов: Стадия %d", stageNum)
+
+	if !fileUtils.Exist(path) {
+		runtime.LogInfo(ctx, "zxc")
+		stage := utils.SetCurrentStage{Stage: downloadStageText, ShowProgress: true}
+		bytes := fileUtils.DownloadBytesWithProgress(ctx, src.DownloadUrl+"updates/"+fileName, stage, "GET", nil)
+
+		fileUtils.CreateFile(path, bytes)
+		return
+	}
+
+	stage := utils.SetCurrentStage{Stage: fmt.Sprintf("Проверка компонентов: Стадия %d", stageNum), ShowProgress: false}
+	runtime.EventsEmit(ctx, "setCurrentStage", stage)
+
+	hash, _ := hashUtils.Md5(path)
+
+	body := struct {
+		Hash          string `json:"hash"`
+		FileExtension string `json:"fileExtension"`
+	}{
+		Hash:          hash,
+		FileExtension: src.FileExtension,
+	}
+	bodyBytes, _ := json.Marshal(body)
+
+	stage = utils.SetCurrentStage{Stage: downloadStageText, ShowProgress: true}
+	bytes := fileUtils.DownloadBytesWithProgress(ctx, url, stage, "POST", bodyBytes)
+
+	if len(bytes) > 0 {
+		fileUtils.CreateFile(path, bytes)
+	}
 }
 
 func (c *ClientProcessesService) updateClient(ctx context.Context) {
@@ -333,19 +365,23 @@ func (c *ClientProcessesService) MinecraftStart(ctx context.Context) {
 	stage := utils.SetCurrentStage{Stage: "Запуск Minecraft", ShowProgress: false}
 	runtime.EventsEmit(ctx, "setCurrentStage", stage)
 
+	commandGuard := "C:/Users/lost/soxr/files/GolandProjects/LauncherGuard/go_build_LauncherGuard.exe"
 	javaBinName := "java"
+
 	if systemUtils.GetSystemInfo().OS == "windows" {
 		javaBinName = javaBinName + ".exe"
 	}
 
-	command := filepath.Join(src.JavaPath, fmt.Sprintf("java%s-%s-%s", c.Profile.Backend.JavaVersion, systemUtils.GetSystemInfo().OS, systemUtils.GetSystemInfo().Architecture), "bin", javaBinName)
+	commandGame := filepath.Join(src.JavaPath, fmt.Sprintf("java%s-%s-%s", c.Profile.Backend.JavaVersion, systemUtils.GetSystemInfo().OS, systemUtils.GetSystemInfo().Architecture), "bin", javaBinName)
+
 	if systemUtils.GetSystemInfo().OS == "linux" {
-		os.Chmod(command, 0755)
+		os.Chmod(commandGame, 0755)
 	}
 
 	nativePath := c.getNativePath()
 	var commandArgs []string
 
+	commandArgs = append(commandArgs, commandGame)
 	commandArgs = append(commandArgs,
 		"-Xms1G",
 		fmt.Sprintf("-Xmx%dG", c.Settings.DedicatedRAMGB),
@@ -365,7 +401,7 @@ func (c *ClientProcessesService) MinecraftStart(ctx context.Context) {
 		"-Djava.library.path="+nativePath,
 	)
 
-	commandArgs = append(commandArgs, fmt.Sprintf("-javaagent:%s=http://localhost:8080/api/auth/yggdrasil", authlibPath))
+	commandArgs = append(commandArgs, fmt.Sprintf("-javaagent:%s=%s", src.AuthlibPath, src.YggdrasilApiUrl))
 
 	jvmArgs := c.Profile.Backend.Arguments.Jvm
 	if jvmArgs != nil {
@@ -449,11 +485,8 @@ func (c *ClientProcessesService) MinecraftStart(ctx context.Context) {
 	}
 
 	commandArgs = append(commandArgs, replacedGameArgsArray...)
-	cmd := exec.CommandContext(ctx, command, commandArgs...)
-
-	cmd.SysProcAttr = &syscall.SysProcAttr{
-		CreationFlags: 0x08000000,
-	}
+	cmd := exec.CommandContext(ctx, commandGuard, commandArgs...)
+	setProcessGroup(cmd)
 
 	stdoutPipe, _ := cmd.StdoutPipe()
 	stderrPipe, _ := cmd.StderrPipe()
@@ -461,6 +494,7 @@ func (c *ClientProcessesService) MinecraftStart(ctx context.Context) {
 	cmd.Dir = c.ClientPath
 	cmd.Env = os.Environ()
 
+	fileWatcherUtils.Close()
 	err := cmd.Start()
 
 	if err != nil {
@@ -538,7 +572,10 @@ func (c *ClientProcessesService) MinecraftStart(ctx context.Context) {
 	}()
 
 	runtime.EventsOn(ctx, "killProcess", func(optionalData ...interface{}) {
-		cmd.Process.Kill()
+		err := killProcessGroup(cmd)
+		if err != nil {
+			runtime.LogInfo(ctx, fmt.Sprintf("не удалось завершить группу процессов: %v\n", err))
+		}
 		runtime.EventsEmit(ctx, "setText", "[Launcher] Запуск Minecraft остановлен")
 		runtime.EventsOff(ctx, "killProcess")
 	})

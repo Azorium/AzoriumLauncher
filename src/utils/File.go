@@ -137,8 +137,10 @@ func (f *FileUtils) CreateFileFromBytes(bytes []byte, filePath string) error {
 }
 
 func (f *FileUtils) DownloadBytesWithProgress(ctx context.Context, url string, stage SetCurrentStage, reqType string, bodyJsonData []byte) []byte {
+
 	req, err := http.NewRequest(reqType, url, bytes.NewReader(bodyJsonData))
 	if err != nil {
+		runtime.LogInfo(ctx, err.Error())
 		panic(err)
 	}
 
@@ -149,9 +151,15 @@ func (f *FileUtils) DownloadBytesWithProgress(ctx context.Context, url string, s
 	client := &http.Client{}
 	resp, err := client.Do(req)
 	if err != nil {
+		runtime.LogInfo(ctx, err.Error())
 		panic(err)
 	}
-	defer resp.Body.Close()
+	defer func(Body io.ReadCloser) {
+		err := Body.Close()
+		if err != nil {
+			runtime.LogInfo(ctx, err.Error())
+		}
+	}(resp.Body)
 
 	totalSize := resp.ContentLength
 	if totalSize <= 0 {
@@ -163,9 +171,6 @@ func (f *FileUtils) DownloadBytesWithProgress(ctx context.Context, url string, s
 		runtime.EventsEmit(ctx, "setCurrentStage", stage)
 		return nil
 	}
-
-	runtime.EventsEmit(ctx, "setCurrentStage", stage)
-	runtime.EventsEmit(ctx, "setProgress", 0)
 
 	progressReader := &ProgressReader{
 		r:     resp.Body,
@@ -181,6 +186,9 @@ func (f *FileUtils) DownloadBytesWithProgress(ctx context.Context, url string, s
 			}
 		},
 	}
+
+	runtime.EventsEmit(ctx, "setCurrentStage", stage)
+	runtime.EventsEmit(ctx, "setProgress", 0)
 
 	bodyBytes, err := io.ReadAll(progressReader)
 	if err != nil {
