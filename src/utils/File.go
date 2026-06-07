@@ -35,6 +35,11 @@ type SetCurrentStage struct {
 	ShowProgress bool   `json:"showProgress"`
 }
 
+func (f *FileUtils) CreateFile(path string, bytes []byte) {
+	os.Create(path)
+	os.WriteFile(path, bytes, 0775)
+}
+
 func (f *FileUtils) CreateFolder(path string) error {
 	err := os.MkdirAll(path, 0755)
 
