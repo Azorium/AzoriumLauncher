@@ -4,6 +4,7 @@ import (
 	"azoriumlauncher/src/utils"
 	"os"
 	"path/filepath"
+	"runtime"
 	"strings"
 	"time"
 )
@@ -29,12 +30,13 @@ var AssetsPath string
 var IndexesPath string
 var ObjectsPath string
 var JavaPath string
-
 var AssetsHashPath string
 var ClientsHashPath string
+
 var Hash string
 var Path string
 var User UserType
+var FileExtensions string
 
 type UserType struct {
 	Username string `json:"username"`
@@ -61,6 +63,10 @@ func (c *Consts) LoadConsts() bool {
 
 	if mainApiUrl == "" {
 		return false
+	}
+
+	if strings.Contains(runtime.GOOS, "win") {
+		FileExtensions = ".exe"
 	}
 
 	DownloadUrl = mainApiUrl + "/download/"
