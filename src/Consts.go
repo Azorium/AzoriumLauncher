@@ -17,6 +17,7 @@ var ClientsUrl string
 var AssetsUrl string
 var JavaUrl string
 var AuthlibUrl string
+var LauncherGuardUrl string
 var GameFilesUpdateUrl string
 var LauncherUpdateUrl string
 var LauncherCheckUpdateUrl string
@@ -73,9 +74,10 @@ func (c *Consts) LoadConsts() bool {
 	ClientsUrl = mainApiUrl + "/download/client/cached"
 	AssetsUrl = mainApiUrl + "/download/caches/assets/"
 	JavaUrl = mainApiUrl + "/download/updates/java/"
-	AuthlibUrl = mainApiUrl + "/download/updates/authlib-injector.jar"
+	AuthlibUrl = mainApiUrl + "/update/authlib"
 	GameFilesUpdateUrl = mainApiUrl + "/update/game_files"
 	LauncherUpdateUrl = mainApiUrl + "/update/launcher"
+	LauncherGuardUrl = mainApiUrl + "/update/launcheguard"
 	LauncherCheckUpdateUrl = mainApiUrl + "/update/launcher/check"
 
 	var osUtils = utils.SystemUtils{}
