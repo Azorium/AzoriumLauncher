@@ -17,6 +17,7 @@ var ClientsUrl string
 var AssetsUrl string
 var JavaUrl string
 var AuthlibUrl string
+var LauncherComponentsUrl string
 var LauncherGuardUrl string
 var GameFilesUpdateUrl string
 var LauncherUpdateUrl string
@@ -36,11 +37,19 @@ var AssetsHashPath string
 var ClientsHashPath string
 var AuthlibPath string
 var LauncherGuardPath string
+var RuntimePath string
+var DistPath string
+var RuntimeZipPath string
 
-var Hash string
-var Path string
+var ExecPath string
 var User UserType
 var FileExtension string
+var LauncherUpdate LauncherUpdateType
+
+type LauncherUpdateType struct {
+	RuntimeZipHash   string `json:"runtimeZipHash"`
+	LauncherFileHash string `json:"launcherFileHash"`
+}
 
 type UserType struct {
 	Username string `json:"username"`
@@ -77,6 +86,7 @@ func (c *Consts) LoadConsts() bool {
 	ClientsUrl = mainApiUrl + "/download/client/cached"
 	AssetsUrl = mainApiUrl + "/download/caches/assets/"
 	JavaUrl = mainApiUrl + "/download/updates/java/"
+	LauncherComponentsUrl = DownloadUrl + "updates/launcher/components/"
 	AuthlibUrl = mainApiUrl + "/update/authlib"
 	GameFilesUpdateUrl = mainApiUrl + "/update/game_files"
 	LauncherUpdateUrl = mainApiUrl + "/update/launcher"
@@ -106,12 +116,22 @@ func (c *Consts) LoadConsts() bool {
 	ObjectsPath = filepath.Join(AssetsPath, "objects")
 	AuthlibPath = filepath.Join(UpdatesPath, "authlib-injector.jar")
 	LauncherGuardPath = filepath.Join(UpdatesPath, "LauncherGuard"+FileExtension)
+	RuntimePath = filepath.Join(RootPath, "runtime")
+	RuntimeZipPath = filepath.Join(RuntimePath, "runtime.zip")
+	DistPath = filepath.Join(RuntimePath, "dist")
 
 	AssetsHashPath = filepath.Join(HashesPath, "assets.json")
 	ClientsHashPath = filepath.Join(HashesPath, "clients.json")
 
-	Path, _ = os.Executable()
-	Hash, _ = hashUtils.Md5(Path)
+	ExecPath, _ = os.Executable()
+
+	launcherFileHash, _ := hashUtils.Md5(ExecPath)
+	runtimeZipHash, _ := hashUtils.Md5(RuntimeZipPath)
+
+	LauncherUpdate = LauncherUpdateType{
+		LauncherFileHash: launcherFileHash,
+		RuntimeZipHash:   runtimeZipHash,
+	}
 
 	return true
 }

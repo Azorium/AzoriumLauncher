@@ -3,18 +3,95 @@ package service
 import (
 	"azoriumlauncher/src"
 	"azoriumlauncher/src/utils"
+	"bytes"
 	"context"
 	"encoding/json"
 	"io"
 	"net/http"
 	"os"
 	"os/exec"
-	"strings"
+	"path/filepath"
 
 	"github.com/wailsapp/wails/v2/pkg/runtime"
 )
 
 type LauncherUpdate struct{}
+
+func (u *LauncherUpdate) CheckFilesForUpdate(ctx context.Context) {
+	bodyBytes, _ := json.Marshal(src.LauncherUpdate)
+	req, _ := http.NewRequest("POST", src.LauncherCheckUpdateUrl+"?checkType=files", bytes.NewReader(bodyBytes))
+	req.Header.Set("Content-Type", "application/json")
+
+	client := &http.Client{}
+	resp, _ := client.Do(req)
+
+	defer resp.Body.Close()
+	body, _ := io.ReadAll(resp.Body)
+
+	filesCheckObj := struct {
+		RuntimeZipIsNeeded   bool `json:"runtimeZipIsNeeded"`
+		LauncherFileIsNeeded bool `json:"launcherFileIsNeeded"`
+	}{}
+
+	json.Unmarshal(body, &filesCheckObj)
+
+	if filesCheckObj.RuntimeZipIsNeeded {
+		u.DownloadRuntimeZip(ctx)
+	}
+
+	if filesCheckObj.LauncherFileIsNeeded {
+		u.DownloadLauncher(ctx)
+		return
+	}
+
+	cmd := exec.Command(src.ExecPath)
+	if err := cmd.Start(); err != nil {
+		return
+	}
+
+	runtime.Quit(ctx)
+}
+
+func (u *LauncherUpdate) DownloadRuntimeZip(ctx context.Context) {
+	stage := utils.SetCurrentStage{Stage: "Установка Runtime", ShowProgress: true}
+
+	reqBytes := fileUtils.DownloadBytesWithProgress(ctx, src.LauncherComponentsUrl+"runtime_dist.zip", stage, "GET", nil)
+
+	runtime.LogInfo(ctx, src.LauncherComponentsUrl+"runtime_dist.zip")
+
+	stage = utils.SetCurrentStage{Stage: "Обновление Runtime", ShowProgress: false}
+	runtime.EventsEmit(ctx, "setCurrentStage", stage)
+
+	err := fileUtils.CreateFileFromBytes(src.RuntimeZipPath, reqBytes)
+
+	if err != nil {
+		runtime.LogInfo(ctx, err.Error())
+	}
+
+	filepath.WalkDir(src.DistPath, func(path string, d os.DirEntry, err error) error {
+		os.Remove(path)
+		return nil
+	})
+
+	reader, _ := zipUtils.ReadZipFromBytes(reqBytes)
+
+	for _, file := range reader.File {
+		reader, _ := file.Open()
+
+		fileBytes, _ := io.ReadAll(reader)
+		reader.Close()
+
+		if file.FileInfo().IsDir() {
+			fileUtils.CreateFolder(filepath.Join(src.DistPath, file.Name))
+			continue
+		}
+
+		err = fileUtils.CreateFileFromBytes(filepath.Join(src.DistPath, file.Name), fileBytes)
+		if err != nil {
+			runtime.LogInfo(ctx, err.Error())
+		}
+	}
+}
 
 func (u *LauncherUpdate) DownloadLauncher(ctx context.Context) {
 	systemInfo := systemUtils.GetSystemInfo()
@@ -28,14 +105,14 @@ func (u *LauncherUpdate) DownloadLauncher(ctx context.Context) {
 
 	bodyBytes, _ := json.Marshal(body)
 
-	stage := utils.SetCurrentStage{Stage: "Установка обновлений", ShowProgress: true}
-	bytes := fileUtils.DownloadBytesWithProgress(ctx, src.LauncherUpdateUrl, stage, "POST", bodyBytes)
+	stage := utils.SetCurrentStage{Stage: "Установка лаунчера", ShowProgress: true}
+	reqBytes := fileUtils.DownloadBytesWithProgress(ctx, src.LauncherUpdateUrl, stage, "POST", bodyBytes)
 
 	stage = utils.SetCurrentStage{Stage: "Обновление лаунчера", ShowProgress: false}
 	runtime.EventsEmit(ctx, "setCurrentStage", stage)
 
-	reader, _ := zipUtils.ReadZipFromBytes(bytes)
-	os.Rename(src.Path, src.Path+"old")
+	reader, _ := zipUtils.ReadZipFromBytes(reqBytes)
+	os.Rename(src.ExecPath, src.ExecPath+"old")
 
 	for _, file := range reader.File {
 		reader, _ := file.Open()
@@ -43,13 +120,13 @@ func (u *LauncherUpdate) DownloadLauncher(ctx context.Context) {
 		fileBytes, _ := io.ReadAll(reader)
 		reader.Close()
 
-		err := os.WriteFile(src.Path, fileBytes, 0775)
+		err := os.WriteFile(src.ExecPath, fileBytes, 0775)
 		if err != nil {
 			runtime.LogError(ctx, err.Error())
 		}
 	}
 
-	cmd := exec.Command(src.Path, src.Path+"old")
+	cmd := exec.Command(src.ExecPath, src.ExecPath+"old")
 	if err := cmd.Start(); err != nil {
 		return
 	}
@@ -57,8 +134,9 @@ func (u *LauncherUpdate) DownloadLauncher(ctx context.Context) {
 	runtime.Quit(ctx)
 }
 
-func (u *LauncherUpdate) CheckUpdate(hash string) bool {
-	req, _ := http.NewRequest("POST", src.LauncherCheckUpdateUrl, strings.NewReader(hash))
+func (u *LauncherUpdate) CheckNeedUpdate() bool {
+	bodyBytes, _ := json.Marshal(src.LauncherUpdate)
+	req, _ := http.NewRequest("POST", src.LauncherCheckUpdateUrl+"?checkType=need", bytes.NewReader(bodyBytes))
 
 	req.Header.Set("Content-Type", "application/json")
 

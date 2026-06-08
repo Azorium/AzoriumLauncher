@@ -35,11 +35,6 @@ type SetCurrentStage struct {
 	ShowProgress bool   `json:"showProgress"`
 }
 
-func (f *FileUtils) CreateFile(path string, bytes []byte) {
-	os.Create(path)
-	os.WriteFile(path, bytes, 0775)
-}
-
 func (f *FileUtils) CreateFolder(path string) error {
 	err := os.MkdirAll(path, 0755)
 
@@ -120,7 +115,7 @@ func (f *FileUtils) DownloadFromUrl(url string) ([]byte, error) {
 	return bytes, nil
 }
 
-func (f *FileUtils) CreateFileFromBytes(bytes []byte, filePath string) error {
+func (f *FileUtils) CreateFileFromBytes(filePath string, bytes []byte) error {
 	_, err := os.Create(filePath)
 
 	if err != nil {

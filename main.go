@@ -2,7 +2,6 @@ package main
 
 import (
 	"azoriumlauncher/src"
-	"embed"
 	"fmt"
 	"os"
 
@@ -13,9 +12,6 @@ import (
 	"github.com/wailsapp/wails/v2/pkg/options/mac"
 	"github.com/wailsapp/wails/v2/pkg/options/windows"
 )
-
-//go:embed all:frontend/dist
-var assets embed.FS
 
 func main() {
 	app := NewApp()
@@ -38,7 +34,7 @@ func main() {
 		Frameless:     true,
 		Height:        height,
 		AssetServer: &assetserver.Options{
-			Assets: assets,
+			Assets: getAssets(),
 		},
 		BackgroundColour: &options.RGBA{R: 0, G: 0, B: 0, A: 0},
 		Windows: &windows.Options{

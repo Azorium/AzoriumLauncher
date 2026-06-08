@@ -44,7 +44,7 @@ export const LauncherUpdate = () => {
             <Header/>
             <div className="update-checker-page">
                 <div className="video-background">
-                    <img src="/assets/images/background.png" alt="Background" className="bg-gif"/>
+                    <img src="/assets/images/background.jpg" alt="Background" className="bg-gif"/>
                     <div className="video-overlay"></div>
                 </div>
 

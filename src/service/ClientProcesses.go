@@ -177,9 +177,9 @@ func (c *ClientProcessesService) downloadComponent(ctx context.Context, path str
 
 	if !fileUtils.Exist(path) {
 		stage := utils.SetCurrentStage{Stage: downloadStageText, ShowProgress: true}
-		bytes := fileUtils.DownloadBytesWithProgress(ctx, src.DownloadUrl+"updates/"+fileName, stage, "GET", nil)
+		bytes := fileUtils.DownloadBytesWithProgress(ctx, src.LauncherComponentsUrl+fileName, stage, "GET", nil)
 
-		fileUtils.CreateFile(path, bytes)
+		fileUtils.CreateFileFromBytes(path, bytes)
 		return
 	}
 
@@ -201,7 +201,7 @@ func (c *ClientProcessesService) downloadComponent(ctx context.Context, path str
 	bytes := fileUtils.DownloadBytesWithProgress(ctx, url, stage, "POST", bodyBytes)
 
 	if len(bytes) > 0 {
-		fileUtils.CreateFile(path, bytes)
+		fileUtils.CreateFileFromBytes(path, bytes)
 	}
 }
 

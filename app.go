@@ -21,15 +21,18 @@ var launcherUpdateService = service.LauncherUpdate{}
 var consts = src.Consts{}
 var StartPage string
 var isReachableServer bool
+var isNeedUpdate bool
 
 type App struct {
 	ctx context.Context
 }
 
 func NewApp() *App {
+
 	isReachableServer = consts.LoadConsts()
 	if isReachableServer {
-		if update := launcherUpdateService.CheckUpdate(src.Hash); update {
+		if update := launcherUpdateService.CheckNeedUpdate(); update {
+			isNeedUpdate = true
 			StartPage = "update"
 		} else {
 			StartPage = "main"
@@ -48,17 +51,20 @@ func NewApp() *App {
 	fileUtils.CreateFolder(src.AssetsPath)
 	fileUtils.CreateFolder(src.ObjectsPath)
 	fileUtils.CreateFolder(src.IndexesPath)
+	fileUtils.CreateFolder(src.RuntimePath)
+	fileUtils.CreateFolder(src.DistPath)
+
 	settingsService.CreateSettingsFile()
 
 	return &App{}
 }
 
 func (a *App) startup(ctx context.Context) {
+	a.ctx = ctx
+
 	if len(os.Args) > 1 {
 		os.Remove(os.Args[1])
 	}
-
-	a.ctx = ctx
 
 	if runtime.Environment(a.ctx).BuildType == "dev" {
 		if !isReachableServer {
@@ -130,6 +136,6 @@ func (a *App) SetUser(user src.UserType) {
 }
 
 func (a *App) LauncherUpdateGO() {
-	launcherUpdateService.DownloadLauncher(a.ctx)
+	launcherUpdateService.CheckFilesForUpdate(a.ctx)
 	runtime.EventsEmit(a.ctx, "offLUEvents")
 }

@@ -13,7 +13,7 @@ func (h *HashUtils) Md5(filePath string) (string, error) {
 
 	file, err := os.Open(filePath)
 	if err != nil {
-		return "", err
+		return "none", err
 	}
 	defer file.Close()
 
