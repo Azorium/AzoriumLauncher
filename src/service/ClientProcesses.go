@@ -364,7 +364,6 @@ func (c *ClientProcessesService) MinecraftStart(ctx context.Context) {
 	stage := utils.SetCurrentStage{Stage: "Запуск Minecraft", ShowProgress: false}
 	runtime.EventsEmit(ctx, "setCurrentStage", stage)
 
-	commandGuard := "C:/Users/lost/soxr/files/GolandProjects/LauncherGuard/go_build_LauncherGuard.exe"
 	javaBinName := "java"
 
 	if systemUtils.GetSystemInfo().OS == "windows" {
@@ -484,7 +483,7 @@ func (c *ClientProcessesService) MinecraftStart(ctx context.Context) {
 	}
 
 	commandArgs = append(commandArgs, replacedGameArgsArray...)
-	cmd := exec.CommandContext(ctx, commandGuard, commandArgs...)
+	cmd := exec.CommandContext(ctx, src.LauncherGuardPath, commandArgs...)
 	setProcessGroup(cmd)
 
 	stdoutPipe, _ := cmd.StdoutPipe()
