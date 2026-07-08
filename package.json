@@ -2,5 +2,8 @@
   "dependencies": {
     "minecraft-server-util": "^5.4.4",
     "react-icons": "^5.6.0"
+  },
+  "devDependencies": {
+    "prettier": "3.9.4"
   }
 }

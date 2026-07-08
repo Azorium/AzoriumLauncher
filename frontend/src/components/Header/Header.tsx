@@ -1,6 +1,6 @@
 import React from 'react';
 import './Header.css';
-import {Quit, WindowMinimise} from "../../../wailsjs/runtime";
+import { Quit, WindowMinimise } from '../../../wailsjs/runtime';
 
 const Header = () => {
     return (
@@ -12,7 +12,7 @@ const Header = () => {
                 title="Свернуть"
             >
                 <svg className="window-control-icon" viewBox="0 0 10 10">
-                    <rect x="1" y="4.5" width="8" height="1" fill="currentColor"/>
+                    <rect x="1" y="4.5" width="8" height="1" fill="currentColor" />
                 </svg>
             </button>
             <button

@@ -1,31 +1,31 @@
-import React, {useEffect, useState} from 'react';
-import {useNavigate, useParams} from 'react-router';
+import React, { useState } from 'react';
+import { useNavigate, useParams } from 'react-router';
 import './ServerSettings.css';
-import {OptionalMod, Profile} from "../../../js/Interfaces";
-import {Quit, WindowMinimise} from "../../../../wailsjs/runtime";
-import {SaveSettings} from "../../../../wailsjs/go/main/App";
-import {service} from "../../../../wailsjs/go/models";
+import { OptionalMod, Profile } from '../../../js/Interfaces';
+import { Quit, WindowMinimise } from '../../../../wailsjs/runtime';
+import { SaveSettings } from '../../../../wailsjs/go/main/App';
+import { service } from '../../../../wailsjs/go/models';
 import SettingsObj = service.SettingsObj;
 
 const ServerSettings = () => {
     const navigate = useNavigate();
-    const {clientFolderName} = useParams<{ clientFolderName: string }>();
+    const { clientFolderName } = useParams<{ clientFolderName: string }>();
 
     const profile = window.profiles.find((p) => p.backend.folderName === clientFolderName) as unknown as Profile;
     const [mods, setMods] = useState<OptionalMod[]>(window.settings.profiles[`${clientFolderName}`].optionalMods);
 
     const handleBack = () => {
-        navigate('/', {replace: true});
+        navigate('/', { replace: true });
     };
 
     const changeMod = (fileName: string, checked: boolean) => {
         const updatedMods = profile.optionalMods.map((mod) =>
-            mod.fileName === fileName ? {...mod, value: checked} : mod
+            mod.fileName === fileName ? { ...mod, value: checked } : mod,
         );
 
         profile.optionalMods = updatedMods;
         setMods([...updatedMods]);
-        window.settings.profiles[`${clientFolderName}`].optionalMods = updatedMods
+        window.settings.profiles[`${clientFolderName}`].optionalMods = updatedMods;
 
         SaveSettings(window.settings as unknown as SettingsObj).then();
     };
@@ -33,7 +33,7 @@ const ServerSettings = () => {
     return (
         <div className="server-settings-page">
             <div className="video-background">
-                <img src="/assets/images/background.png" alt="Background" className="bg-gif"/>
+                <img src="/assets/images/background.png" alt="Background" className="bg-gif" />
                 <div className="video-overlay"></div>
             </div>
 
@@ -41,9 +41,26 @@ const ServerSettings = () => {
                 <header className="server-settings-top-bar">
                     <div className="server-settings-title-text">
                         <button className="back-btn" onClick={handleBack} aria-label="Вернуться в лаунчер">
-                            <svg className="back-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M19 12H5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                                <path d="M12 5L5 12L12 19" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                            <svg
+                                className="back-icon"
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                xmlns="http://www.w3.org/2000/svg"
+                            >
+                                <path
+                                    d="M19 12H5"
+                                    stroke="currentColor"
+                                    strokeWidth="2"
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                />
+                                <path
+                                    d="M12 5L5 12L12 19"
+                                    stroke="currentColor"
+                                    strokeWidth="2"
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                />
                             </svg>
                         </button>
                         Профиль {profile.frontend.name}
@@ -57,7 +74,7 @@ const ServerSettings = () => {
                             title="Свернуть"
                         >
                             <svg className="window-control-icon" viewBox="0 0 10 10">
-                                <rect x="1" y="4.5" width="8" height="1" fill="currentColor"/>
+                                <rect x="1" y="4.5" width="8" height="1" fill="currentColor" />
                             </svg>
                         </button>
                         <button
@@ -78,23 +95,20 @@ const ServerSettings = () => {
 
                 <main className="server-settings-main">
                     <div
-                        className={`server-settings-mods-list ${mods.length === 0 ? 'server-settings-mods-list--empty' : ''}`}>
+                        className={`server-settings-mods-list ${mods.length === 0 ? 'server-settings-mods-list--empty' : ''}`}
+                    >
                         {mods.length === 0 ? (
                             <div className="server-settings-empty">
                                 <div className="server-settings-empty-icon">!</div>
-                                <div className="server-settings-empty-text">
-                                    Нет доступных опциональных модов
-                                </div>
-                                <div className="server-settings-empty-hint">
-                                    Моды для этого профиля не заданы
-                                </div>
+                                <div className="server-settings-empty-text">Нет доступных опциональных модов</div>
+                                <div className="server-settings-empty-hint">Моды для этого профиля не заданы</div>
                             </div>
                         ) : (
                             mods.map((mod, index) => (
                                 <div
                                     className="server-settings-card"
                                     key={mod.fileName}
-                                    style={{animationDelay: `${index * 0.05}s`}}
+                                    style={{ animationDelay: `${index * 0.05}s` }}
                                 >
                                     <div className="server-settings-info">
                                         <h3 className="server-settings-name">{mod.name}</h3>

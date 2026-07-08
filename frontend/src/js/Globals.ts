@@ -1,8 +1,8 @@
-import {Profiles, Settings, User} from "./Interfaces";
+import { Profiles, Settings, User } from './Interfaces';
 
 declare global {
     interface Window {
-        user: User | null
+        user: User | null;
         profiles: Profiles;
         settings: Settings;
         rootPath: string;

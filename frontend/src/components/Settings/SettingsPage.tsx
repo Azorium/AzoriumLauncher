@@ -1,12 +1,12 @@
-import React, {useEffect, useRef, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import './SettingsPage.css';
-import {useNavigate} from 'react-router';
-import {NotificationItem, Settings} from '../../js/Interfaces';
-import {OpenLauncherRootFolder, SaveSettings} from '../../../wailsjs/go/main/App';
-import {Quit, WindowMinimise} from '../../../wailsjs/runtime';
-import {service} from '../../../wailsjs/go/models';
-import {SkinView} from '../Skin/SkinView';
-import {insertNotification, showNotification} from "../Notification/Notification";
+import { useNavigate } from 'react-router';
+import { NotificationItem, Settings } from '../../js/Interfaces';
+import { OpenLauncherRootFolder, SaveSettings } from '../../../wailsjs/go/main/App';
+import { Quit, WindowMinimise } from '../../../wailsjs/runtime';
+import { service } from '../../../wailsjs/go/models';
+import { SkinView } from '../Skin/SkinView';
+import { insertNotification, showNotification } from '../Notification/Notification';
 import SettingsObj = service.SettingsObj;
 
 export const SettingsPage = () => {
@@ -21,19 +21,21 @@ export const SettingsPage = () => {
             window.settings.dedicatedRamGB = memory;
             SaveSettings(window.settings as unknown as SettingsObj).then();
         }
-    }, [memory])
+    }, [memory]);
 
     const handleBack = () => {
-        navigate('/', {replace: true});
+        navigate('/', { replace: true });
     };
 
     const handleOpenProfile = () => {
-        user ? navigate('/profile', {replace: true}) : showNotification('error', `Войдите в аккаунт, чтобы войти в профиль`, setNotifications);
+        user
+            ? navigate('/profile', { replace: true })
+            : showNotification('error', `Войдите в аккаунт, чтобы войти в профиль`, setNotifications);
     };
 
     const changeSettings = (target: React.ChangeEvent<HTMLInputElement>['target'], type: string) => {
         if (settings) {
-            let changedSettings = {...settings};
+            let changedSettings = { ...settings };
             changedSettings['base'][type]['value'] = target.checked;
             SaveSettings(changedSettings as unknown as SettingsObj).then();
             setSettings(changedSettings);
@@ -44,17 +46,13 @@ export const SettingsPage = () => {
     const renderToggleList = () => {
         if (!settings) return null;
         return Object.entries(settings['base']).map(([key, value], idx) => (
-            <div className="toggle-row" key={value.index} style={{animationDelay: `${idx * 0.05}s`}}>
+            <div className="toggle-row" key={value.index} style={{ animationDelay: `${idx * 0.05}s` }}>
                 <div className="toggle-text">
                     <span className="toggle-name">{value.name}</span>
                     <span className="toggle-desc">{value.description}</span>
                 </div>
                 <label className="toggle-switch">
-                    <input
-                        type="checkbox"
-                        checked={value.value}
-                        onChange={(e) => changeSettings(e.target, key)}
-                    />
+                    <input type="checkbox" checked={value.value} onChange={(e) => changeSettings(e.target, key)} />
                     <span className="toggle-slider"></span>
                 </label>
             </div>
@@ -63,10 +61,10 @@ export const SettingsPage = () => {
 
     return (
         <>
-            <SkinView isSettingsPage={false}/>
+            <SkinView isSettingsPage={false} />
             <div className="settings-page">
                 <div className="video-background">
-                    <img src="/assets/images/background.png" alt="Background" className="bg-gif"/>
+                    <img src="/assets/images/background.png" alt="Background" className="bg-gif" />
                     <div className="video-overlay"></div>
                 </div>
 
@@ -74,12 +72,26 @@ export const SettingsPage = () => {
                     <header className="settings-top-bar">
                         <div className="settings-title-text">
                             <button className="back-btn" onClick={handleBack} aria-label="Вернуться в лаунчер">
-                                <svg className="back-icon" viewBox="0 0 24 24" fill="none"
-                                     xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M19 12H5" stroke="currentColor" strokeWidth="2" strokeLinecap="round"
-                                          strokeLinejoin="round"/>
-                                    <path d="M12 5L5 12L12 19" stroke="currentColor" strokeWidth="2"
-                                          strokeLinecap="round" strokeLinejoin="round"/>
+                                <svg
+                                    className="back-icon"
+                                    viewBox="0 0 24 24"
+                                    fill="none"
+                                    xmlns="http://www.w3.org/2000/svg"
+                                >
+                                    <path
+                                        d="M19 12H5"
+                                        stroke="currentColor"
+                                        strokeWidth="2"
+                                        strokeLinecap="round"
+                                        strokeLinejoin="round"
+                                    />
+                                    <path
+                                        d="M12 5L5 12L12 19"
+                                        stroke="currentColor"
+                                        strokeWidth="2"
+                                        strokeLinecap="round"
+                                        strokeLinejoin="round"
+                                    />
                                 </svg>
                             </button>
                             Настройки
@@ -93,7 +105,7 @@ export const SettingsPage = () => {
                                 title="Свернуть"
                             >
                                 <svg className="settings-window-control-icon" viewBox="0 0 10 10">
-                                    <rect x="1" y="4.5" width="8" height="1" fill="currentColor"/>
+                                    <rect x="1" y="4.5" width="8" height="1" fill="currentColor" />
                                 </svg>
                             </button>
                             <button
@@ -116,9 +128,7 @@ export const SettingsPage = () => {
                         <div className="settings-columns">
                             <section className="settings-panel">
                                 <h2 className="panel-title">Основные параметры</h2>
-                                <div className="toggle-list">
-                                    {renderToggleList()}
-                                </div>
+                                <div className="toggle-list">{renderToggleList()}</div>
                             </section>
 
                             <aside className="settings-actions">
@@ -128,14 +138,18 @@ export const SettingsPage = () => {
                                             <h3 className="action-name">Профиль игрока</h3>
                                             <p className="action-desc">Статистика и выход из аккаунта</p>
                                         </div>
-                                        <button className="action-btn" onClick={handleOpenProfile}>Перейти</button>
+                                        <button className="action-btn" onClick={handleOpenProfile}>
+                                            Перейти
+                                        </button>
                                     </div>
                                     <div className="action-card">
                                         <div className="action-info">
                                             <h3 className="action-name">Место хранения файлов</h3>
                                             <p className="action-desc">Папка с файлами игры и лаунчера</p>
                                         </div>
-                                        <button className="action-btn" onClick={OpenLauncherRootFolder}>Открыть</button>
+                                        <button className="action-btn" onClick={OpenLauncherRootFolder}>
+                                            Открыть
+                                        </button>
                                     </div>
                                 </div>
 

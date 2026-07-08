@@ -1,62 +1,58 @@
-import {useEffect, useState} from "react";
-import {GetProfiles, GetProjectName, GetRootPath, GetSettings, SaveSettings} from "../wailsjs/go/main/App";
-import {Profiles, ProfileSettings} from "./js/Interfaces";
-import {service} from "../wailsjs/go/models";
-import {BrowserRouter} from "react-router";
-import {Routers} from "./components/Routers";
+import { useEffect, useState } from 'react';
+import { GetProfiles, GetProjectName, GetRootPath, GetSettings, SaveSettings } from '../wailsjs/go/main/App';
+import { Profiles, ProfileSettings } from './js/Interfaces';
+import { service } from '../wailsjs/go/models';
+import { BrowserRouter } from 'react-router';
+import { Routers } from './components/Routers';
 import SettingsObj = service.SettingsObj;
 
 const App = () => {
     const [isProfilesGetted, setIsProfilesGetted] = useState<boolean | null>(null);
 
     useEffect(() => {
-        GetProfiles().then(profiles => {
+        GetProfiles().then((profiles) => {
             window.profiles = profiles as Profiles;
             setIsProfilesGetted(true);
         });
 
-        GetSettings().then(obj => window.settings = obj);
-        GetRootPath().then(path => {
+        GetSettings().then((obj) => (window.settings = obj));
+        GetRootPath().then((path) => {
             window.rootPath = path;
         });
-        GetProjectName().then(projectName => window.projectName = projectName);
-    }, [])
+        GetProjectName().then((projectName) => (window.projectName = projectName));
+    }, []);
 
     useEffect(() => {
         if (isProfilesGetted) {
             if (window.settings.profiles == null) window.settings.profiles = {};
 
-            window.profiles.forEach(profile => {
+            window.profiles.forEach((profile) => {
                 const clientFolderName = profile.backend.folderName;
 
                 if (window.settings.profiles[`${clientFolderName}`] == null) {
                     const newProfile: ProfileSettings = {
-                        optionalMods: profile.optionalMods
+                        optionalMods: profile.optionalMods,
                     };
+
                     window.settings.profiles[`${clientFolderName}`] = newProfile as unknown as service.ProfileSettings;
                 } else {
                     let settingsOptionalMods = window.settings.profiles[`${clientFolderName}`].optionalMods;
                     const profileOptionalMods = profile.optionalMods;
 
-                    if (profileOptionalMods.length == 0) return window.settings.profiles[`${clientFolderName}`].optionalMods = [];
+                    if (profileOptionalMods.length == 0)
+                        return (window.settings.profiles[`${clientFolderName}`].optionalMods = []);
 
                     let settingsMods: string[] = [];
                     let profileMods: string[] = [];
 
-                    profileOptionalMods.forEach(profileMod => {
-                        profileMods = [
-                            ...profileMods,
-                            profileMod.name
-                        ];
+                    profileOptionalMods.forEach((profileMod) => {
+                        profileMods = [...profileMods, profileMod.name];
                     });
 
-                    settingsOptionalMods.forEach(settingsMod => {
-                        settingsMods = [
-                            ...settingsMods,
-                            settingsMod.name
-                        ];
+                    settingsOptionalMods.forEach((settingsMod) => {
+                        settingsMods = [...settingsMods, settingsMod.name];
 
-                        profileOptionalMods.forEach(profileMod => {
+                        profileOptionalMods.forEach((profileMod) => {
                             if (settingsMod.name == profileMod.name) {
                                 settingsMod.name = profileMod.name;
                                 settingsMod.description = profileMod.description;
@@ -65,17 +61,21 @@ const App = () => {
                         });
                     });
 
-                    settingsMods.forEach(modName => {
+                    settingsMods.forEach((modName) => {
                         if (!profileMods.includes(modName)) {
-                            window.settings.profiles[`${clientFolderName}`].optionalMods = settingsOptionalMods.filter(mod => mod.name != modName);
+                            window.settings.profiles[`${clientFolderName}`].optionalMods = settingsOptionalMods.filter(
+                                (mod) => mod.name != modName,
+                            );
                         }
                     });
 
-                    profileMods.forEach(modName => {
+                    profileMods.forEach((modName) => {
                         if (!settingsMods.includes(modName)) {
-                            profileOptionalMods.filter(mod => modName == mod.name).forEach(mod => {
-                                settingsOptionalMods.push(mod);
-                            });
+                            profileOptionalMods
+                                .filter((mod) => modName == mod.name)
+                                .forEach((mod) => {
+                                    settingsOptionalMods.push(mod);
+                                });
                         }
                     });
                 }
@@ -83,7 +83,7 @@ const App = () => {
 
             SaveSettings(window.settings as unknown as SettingsObj).then();
         }
-    }, [isProfilesGetted])
+    }, [isProfilesGetted]);
 
     if (isProfilesGetted == null) return null;
 
@@ -91,11 +91,11 @@ const App = () => {
         <>
             <>
                 <BrowserRouter>
-                    <Routers/>
+                    <Routers />
                 </BrowserRouter>
             </>
         </>
     );
-}
+};
 
 export default App;

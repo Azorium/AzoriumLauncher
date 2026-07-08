@@ -1,12 +1,16 @@
 import * as skinview3d from 'skinview3d';
-import {SkinViewer} from 'skinview3d';
+import { SkinViewer } from 'skinview3d';
 
 let globalViewer: SkinViewer | null = null;
 let currentSkinUrl: string | null = null;
 
-export function getOrCreateSkinViewer(container: HTMLElement, skinUrl: string, isSettingsPage: boolean | undefined): SkinViewer | null {
+export function getOrCreateSkinViewer(
+    container: HTMLElement,
+    skinUrl: string,
+    isSettingsPage: boolean | undefined,
+): SkinViewer | null {
     if (globalViewer) {
-        if(!isSettingsPage) return null;
+        if (!isSettingsPage) return null;
 
         const oldCanvas = globalViewer.canvas;
         if (oldCanvas && container) {
@@ -39,7 +43,7 @@ export function getOrCreateSkinViewer(container: HTMLElement, skinUrl: string, i
         canvas,
         width: 1,
         height: 1,
-        skin: skinUrl
+        skin: skinUrl,
     });
 
     viewer.animation = new skinview3d.WalkingAnimation();

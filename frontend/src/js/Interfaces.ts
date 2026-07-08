@@ -1,8 +1,8 @@
-import {service} from "../../wailsjs/go/models";
+import { service } from '../../wailsjs/go/models';
 import SettingsObj = service.SettingsObj;
 import Mod = service.Mod;
 
-export {}
+export {};
 
 export interface User {
     username: string;
@@ -24,8 +24,8 @@ export interface Profile {
     frontend: Frontend;
     backend: Backend;
     id: number;
-    mcVersion: string
-    optionalMods: OptionalMod[]
+    mcVersion: string;
+    optionalMods: OptionalMod[];
 }
 
 export interface OptionalMod {
@@ -65,7 +65,7 @@ export interface Settings {
     base: {
         [key: string]: SettingItem;
     };
-    profiles: SettingsObj["profiles"]
+    profiles: SettingsObj['profiles'];
 }
 
 export interface ProfileSettings {
@@ -78,5 +78,3 @@ interface SettingItem {
     description: string;
     value: boolean;
 }
-
-

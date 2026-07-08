@@ -1,12 +1,12 @@
-import React, {useEffect, useRef} from 'react';
-import {API_URL} from "../../js/appConsts";
-import {getOrCreateSkinViewer} from "../../js/utils/skinViewerInstance";
+import React, { useEffect, useRef } from 'react';
+import { API_URL } from '../../js/appConsts';
+import { getOrCreateSkinViewer } from '../../js/utils/skinViewerInstance';
 
 interface SkinViewProps {
     isSettingsPage?: boolean;
 }
 
-export const SkinView: React.FC<SkinViewProps> = ({isSettingsPage}) => {
+export const SkinView: React.FC<SkinViewProps> = ({ isSettingsPage }) => {
     const containerRef = useRef<HTMLDivElement>(null);
     const user = window.user;
 
@@ -20,7 +20,7 @@ export const SkinView: React.FC<SkinViewProps> = ({isSettingsPage}) => {
             return;
         }
 
-        viewer.resetCameraPose()
+        viewer.resetCameraPose();
 
         const loadCape = async () => {
             try {
@@ -34,5 +34,5 @@ export const SkinView: React.FC<SkinViewProps> = ({isSettingsPage}) => {
         loadCape().then();
     }, [user?.username]);
 
-    return <div className="skin-viewer" ref={containerRef}/>;
+    return <div className="skin-viewer" ref={containerRef} />;
 };
