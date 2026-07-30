@@ -62,35 +62,14 @@ func (u *LauncherUpdate) DownloadRuntimeZip(ctx context.Context) {
 	stage = utils.SetCurrentStage{Stage: "Обновление Runtime", ShowProgress: false}
 	runtime.EventsEmit(ctx, "setCurrentStage", stage)
 
-	err := fileUtils.CreateFileFromBytes(src.RuntimeZipPath, reqBytes)
-
-	if err != nil {
-		runtime.LogInfo(ctx, err.Error())
-	}
+	fileUtils.CreateFileFromBytes(src.RuntimeZipPath, reqBytes)
 
 	filepath.WalkDir(src.DistPath, func(path string, d os.DirEntry, err error) error {
 		os.Remove(path)
 		return nil
 	})
 
-	reader, _ := zipUtils.ReadZipFromBytes(reqBytes)
-
-	for _, file := range reader.File {
-		reader, _ := file.Open()
-
-		fileBytes, _ := io.ReadAll(reader)
-		reader.Close()
-
-		if file.FileInfo().IsDir() {
-			fileUtils.CreateFolder(filepath.Join(src.DistPath, file.Name))
-			continue
-		}
-
-		err = fileUtils.CreateFileFromBytes(filepath.Join(src.DistPath, file.Name), fileBytes)
-		if err != nil {
-			runtime.LogInfo(ctx, err.Error())
-		}
-	}
+	zipUtils.UnzipFromBytes(reqBytes, src.DistPath)
 }
 
 func (u *LauncherUpdate) DownloadLauncher(ctx context.Context) {
