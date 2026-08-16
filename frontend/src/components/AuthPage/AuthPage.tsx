@@ -40,13 +40,14 @@ const AuthPage = () => {
                     body: JSON.stringify(formData),
                 });
 
-                const loginData = await loginFetch.json();
 
-                if (loginData.error) {
-                    showNotification('error', `${loginData.error}`, setNotifications);
+
+                if (loginFetch.status == 400) {
+                    showNotification('error', `Неверный никнейм или пароль`, setNotifications);
                     return;
                 }
 
+                const loginData = await loginFetch.json();
                 const result = await checkFetch(loginData.token);
 
                 if (result.error) {
@@ -84,10 +85,10 @@ const AuthPage = () => {
                         <form className="auth-form">
                             <div className="input-group">
                                 <input
-                                    type="login"
-                                    id="email"
+                                    type="text"
+                                    id="username"
                                     name="username"
-                                    placeholder="Login или E-Mail"
+                                    placeholder="Никнейм"
                                     value={formData.username}
                                     onChange={handleChange}
                                 />
