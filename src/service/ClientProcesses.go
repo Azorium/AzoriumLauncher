@@ -179,7 +179,10 @@ func (c *ClientProcessesService) downloadComponent(ctx context.Context, path str
 		stage := utils.SetCurrentStage{Stage: downloadStageText, ShowProgress: true}
 		bytes := fileUtils.DownloadBytesWithProgress(ctx, src.LauncherComponentsUrl+fileName, stage, "GET", nil)
 
-		fileUtils.CreateFileFromBytes(path, bytes)
+		err := fileUtils.CreateFileFromBytes(path, bytes)
+		if err != nil {
+			runtime.LogInfo(ctx, err.Error())
+		}
 		return
 	}
 
@@ -195,13 +198,21 @@ func (c *ClientProcessesService) downloadComponent(ctx context.Context, path str
 		Hash:          hash,
 		FileExtension: src.FileExtension,
 	}
-	bodyBytes, _ := json.Marshal(body)
+	bodyBytes, err := json.Marshal(body)
+
+	if err != nil {
+		runtime.LogInfo(ctx, err.Error())
+	}
 
 	stage = utils.SetCurrentStage{Stage: downloadStageText, ShowProgress: true}
 	bytes := fileUtils.DownloadBytesWithProgress(ctx, url, stage, "POST", bodyBytes)
 
 	if len(bytes) > 0 {
-		fileUtils.CreateFileFromBytes(path, bytes)
+		err = fileUtils.CreateFileFromBytes(path, bytes)
+
+		if err != nil {
+			runtime.LogInfo(ctx, err.Error())
+		}
 	}
 }
 

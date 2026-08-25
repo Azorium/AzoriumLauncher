@@ -187,6 +187,7 @@ func (f *FileUtils) DownloadBytesWithProgress(ctx context.Context, url string, s
 
 	bodyBytes, err := io.ReadAll(progressReader)
 	if err != nil {
+		runtime.LogInfo(ctx, err.Error())
 		panic(err)
 	}
 

@@ -6,7 +6,7 @@ import zipPack from 'vite-plugin-zip-pack';
 export default defineConfig(({ mode }) => {
     const plugins = [react(), tailwindcss()];
 
-    if (mode == 'release') {
+    if (mode == 'release' || mode == 'debug') {
         plugins.push(
             zipPack({
                 inDir: `dist/dev`,

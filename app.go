@@ -72,7 +72,7 @@ func (a *App) startup(ctx context.Context) {
 		}
 
 		StartPage = "main"
-		runtime.WindowSetSize(a.ctx, 1200, 720)
+		runtime.WindowSetSize(a.ctx, 1100, 620)
 		runtime.WindowCenter(a.ctx)
 	}
 }

@@ -1,26 +1,26 @@
 import { service } from '../../wailsjs/go/models';
 import SettingsObj = service.SettingsObj;
 import Mod = service.Mod;
+import React from 'react';
 
 export {};
 
 export interface User {
     username: string;
     uuid: string;
-    groupName: string;
     lastLoginDate: string;
     coins: string;
     registrationDate: string;
     jwt_token: string;
     skinHash: string;
     capeHash: string;
+    role: string;
 }
 
 export type Profiles = Profile[];
 
 export interface Profile {
     currentOnline: number;
-    maxOnline: number;
     frontend: Frontend;
     backend: Backend;
     id: number;
@@ -42,6 +42,7 @@ interface Backend {
 }
 
 interface Frontend {
+    profileImages: string[];
     description: string;
     image: string;
     name: string;
@@ -61,6 +62,7 @@ export interface NotificationItem {
 }
 
 export interface Settings {
+    startCardPage: string;
     dedicatedRamGB: number;
     base: {
         [key: string]: SettingItem;
@@ -77,4 +79,25 @@ interface SettingItem {
     name: string;
     description: string;
     value: boolean;
+}
+
+export type HeaderContextType = {
+    isRenderSettingsButton: React.Dispatch<React.SetStateAction<boolean>>;
+    isRenderBackButton: React.Dispatch<React.SetStateAction<boolean>>;
+    isRenderLogoutButton: React.Dispatch<React.SetStateAction<boolean>>;
+    isRenderAuthButton: React.Dispatch<React.SetStateAction<boolean>>;
+    backUrl: React.Dispatch<React.SetStateAction<string>>;
+};
+
+export type EventMessageType = {
+    progress: number;
+    stage: string;
+    log: string;
+};
+
+export interface SseContextType {
+    eventSource: EventSource | null;
+    emitterKey: number | null;
+    setSseConnection: (emitterKey: number, eventSource: EventSource) => void;
+    closeSse: () => void;
 }

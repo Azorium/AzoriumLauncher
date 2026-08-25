@@ -30,7 +30,7 @@ export const checkFetch = async (token: string) => {
 
     SetUser(window.user as UserType).then();
 
-    fetch(`${API_URL}/uploads/skins/${checkData.skinHash}.png`)
+    await fetch(`${API_URL}/uploads/skins/${checkData.skinHash}.png`)
         .then((res) => res.blob())
         .then((blob) => {
             window.__preloadedSkin = URL.createObjectURL(blob);

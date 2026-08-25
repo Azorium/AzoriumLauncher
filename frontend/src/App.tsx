@@ -3,27 +3,36 @@ import { GetProfiles, GetProjectName, GetRootPath, GetSettings, SaveSettings } f
 import { Profiles, ProfileSettings } from './js/Interfaces';
 import { service } from '../wailsjs/go/models';
 import { BrowserRouter } from 'react-router';
-import { Routers } from './components/Routers';
+import { Routers } from './Routers';
+import { SseProvider } from './components/SseProvider';
 import SettingsObj = service.SettingsObj;
 
 const App = () => {
     const [isProfilesGetted, setIsProfilesGetted] = useState<boolean | null>(null);
+    const [isInit, setIsInit] = useState(false);
 
     useEffect(() => {
-        GetProfiles().then((profiles) => {
-            window.profiles = profiles as Profiles;
-            setIsProfilesGetted(true);
-        });
-
         GetSettings().then((obj) => (window.settings = obj));
         GetRootPath().then((path) => {
             window.rootPath = path;
         });
         GetProjectName().then((projectName) => (window.projectName = projectName));
+
+        GetProfiles()
+            .then((profiles) => {
+                window.profiles = profiles as Profiles;
+            })
+            .catch(() => setIsInit(true))
+            .finally(() => setIsProfilesGetted(true));
     }, []);
 
     useEffect(() => {
         if (isProfilesGetted) {
+            if (isInit) {
+                window.profiles = [];
+                return;
+            }
+
             if (window.settings.profiles == null) window.settings.profiles = {};
 
             window.profiles.forEach((profile) => {
@@ -85,14 +94,16 @@ const App = () => {
         }
     }, [isProfilesGetted]);
 
-    if (isProfilesGetted == null) return null;
+    if (isProfilesGetted == null && !isInit) return null;
 
     return (
         <>
             <>
-                <BrowserRouter>
-                    <Routers />
-                </BrowserRouter>
+                <SseProvider>
+                    <BrowserRouter>
+                        <Routers />
+                    </BrowserRouter>
+                </SseProvider>
             </>
         </>
     );

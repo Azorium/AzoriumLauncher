@@ -23,8 +23,8 @@ func main() {
 		width = 800
 		height = 500
 	} else {
-		width = 1200
-		height = 720
+		width = 1100
+		height = 620
 	}
 
 	err := wails.Run(&options.App{
@@ -57,9 +57,9 @@ func main() {
 		Bind: []interface{}{
 			app,
 		},
-		//Debug: options.Debug{
-		//	OpenInspectorOnStartup: true,
-		//},
+		Debug: options.Debug{
+			OpenInspectorOnStartup: true,
+		},
 	})
 
 	if err != nil {

@@ -207,6 +207,7 @@ export namespace service {
 	}
 	export class SettingsObj {
 	    dedicatedRamGB: number;
+	    startCardPage: string;
 	    base: Base;
 	    profiles: Record<string, ProfileSettings>;
 	
@@ -217,6 +218,7 @@ export namespace service {
 	    constructor(source: any = {}) {
 	        if ('string' === typeof source) source = JSON.parse(source);
 	        this.dedicatedRamGB = source["dedicatedRamGB"];
+	        this.startCardPage = source["startCardPage"];
 	        this.base = this.convertValues(source["base"], Base);
 	        this.profiles = this.convertValues(source["profiles"], ProfileSettings, true);
 	    }

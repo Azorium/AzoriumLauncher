@@ -11,6 +11,7 @@ type SettingsService struct {
 
 type SettingsObj struct {
 	DedicatedRAMGB int              `json:"dedicatedRamGB"`
+	StartCardPage  string           `json:"startCardPage"`
 	Base           Base             `json:"base"`
 	Profiles       ProfilesSettings `json:"profiles"`
 }
@@ -45,6 +46,7 @@ type BaseItem struct {
 func (s *SettingsService) NewSettings() *SettingsObj {
 	return &SettingsObj{
 		DedicatedRAMGB: 6,
+		StartCardPage:  "sky.jpg",
 		Base: Base{
 			AutoClose: BaseItem{
 				Index:       0,

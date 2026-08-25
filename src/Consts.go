@@ -60,7 +60,7 @@ type UserType struct {
 func (c *Consts) LoadConsts() bool {
 	var mainApiUrl string
 	// localhost должен быть в самом конце, это запасной вариант для разработки
-	apiUrls := []string{"launcher.projectname.ru", "localhost"}
+	apiUrls := []string{"launcher.notex.su", "localhost"}
 
 	for _, apiUrl := range apiUrls {
 		if isReachable := utils.IsReachableServer(apiUrl, 8080, 1*time.Second); isReachable {
