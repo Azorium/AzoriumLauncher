@@ -42,7 +42,6 @@ export const LauncherUpdate = () => {
             <OutrouterLayout
                 children={
                     <div className="relative w-full h-full flex flex-col  pt-10! pb-35! select-none">
-                        {/* Шапка */}
                         <div className="flex items-center justify-between mb-8!">
                             <div>
                                 <p className="text-xl font-semibold uppercase tracking-[0.5px] text-white/50 mb-1!">
@@ -59,8 +58,6 @@ export const LauncherUpdate = () => {
                                 </div>
                             </div>
                         </div>
-
-                        {/* Прогрессбар снизу */}
                         <div className="w-full max-w-[1000px] mx-auto!  mt-75!">
                             {showProgress ? (
                                 <div

@@ -9,7 +9,6 @@ export default function ServersPage() {
     const [isCheckedOnline, setIsCheckedOnline] = useState(false);
     const headerContext = useOutletContext<HeaderContextType>();
     const profiles = window.profiles;
-    const user = window.user;
 
     useEffect(() => {
         processingContext(headerContext, 'servers');

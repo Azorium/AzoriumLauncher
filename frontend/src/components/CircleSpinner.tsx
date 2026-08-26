@@ -1,8 +1,8 @@
 interface Windows11SpinnerProps {
-    size?: number; // диаметр
-    strokeWidth?: number; // толщина дуги
-    color?: string; // цвет
-    speed?: number; // длительность оборота, сек
+    size?: number;
+    strokeWidth?: number;
+    color?: string;
+    speed?: number;
 }
 
 export default function CircleSpinner({

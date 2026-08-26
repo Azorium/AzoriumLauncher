@@ -61,7 +61,6 @@ export default function ProfileGalleryModal({ profile, setShowGallery }: Profile
                 className="w-full max-w-[600px] bg-[rgba(20,20,30,0.9)] backdrop-blur rounded-3xl border border-white/10 p-8! shadow-2xl"
                 onClick={(e) => e.stopPropagation()}
             >
-                {/* Заголовок и счётчик */}
                 <div className="flex items-center justify-between mb-4!">
                     <h2 className="text-xl font-bold text-white m-0">Галерея</h2>
                     <div className="flex items-center gap-4">
@@ -77,8 +76,6 @@ export default function ProfileGalleryModal({ profile, setShowGallery }: Profile
                         </button>
                     </div>
                 </div>
-
-                {/* Основная область с картинкой и стрелками */}
                 <div className="relative flex items-center justify-center min-h-[300px] flex-1">
                     {images.length > 1 && (
                         <button
@@ -104,8 +101,6 @@ export default function ProfileGalleryModal({ profile, setShowGallery }: Profile
                         </button>
                     )}
                 </div>
-
-                {/* Миниатюры */}
                 {images.length > 1 && (
                     <div className="flex gap-2 mt-4! overflow-x-auto py-2! [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
                         {images.map((img, idx) => (

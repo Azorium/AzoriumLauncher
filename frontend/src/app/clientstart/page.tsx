@@ -62,7 +62,6 @@ export default function ClientstartPage() {
 
     return (
         <div className="relative w-full h-full flex flex-col  pt-10! pb-35! select-none">
-            {/* Шапка */}
             <div className="flex items-center justify-between mb-8!">
                 <div>
                     <p className="text-lg font-semibold uppercase tracking-[0.5px] text-white/50 mb-1!">
@@ -80,8 +79,6 @@ export default function ClientstartPage() {
                     </div>
                 </div>
             </div>
-
-            {/* Прогрессбар снизу */}
             <div className="w-full max-w-[1000px] mx-auto! -my-40! mt-95!">
                 {showProgress ? (
                     <div

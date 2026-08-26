@@ -20,7 +20,6 @@ const ServerUnavailable = () => {
                     `}</style>
 
                     <div className="relative w-full h-full flex flex-col items-center justify-center px-8! py-10! font-semibold">
-                        {/* Иконка состояния */}
                         <div className="mb-7! flex items-center justify-center rounded-full bg-white/[0.06] backdrop-blur-[12px] border border-white/10 p-4! shadow-[0_0_25px_rgba(94,186,239,0.15)] animate-[serverUnavailableFadeIn_0.5s_ease-out_both]">
                             <div className="flex h-14 w-14 items-center justify-center rounded-full bg-gradient-to-br from-[#0984e3] to-[#5ebaef] text-white shadow-[0_8px_20px_rgba(9,132,227,0.25)]">
                                 <svg
@@ -40,17 +39,14 @@ const ServerUnavailable = () => {
                             </div>
                         </div>
 
-                        {/* Заголовок */}
                         <h1 className="text-4xl font-bold text-white tracking-[-0.5px] mb-3! text-center animate-[serverUnavailableFadeIn_0.5s_ease-out_both]">
                             Сервер временно недоступен
                         </h1>
 
-                        {/* Описание */}
                         <p className="max-w-[540px] text-center text-lg leading-[1.7] text-white/80! mb-8! animate-[serverUnavailableFadeIn_0.5s_ease-out_both]">
                             Возможно, проводятся технические работы или сервер перегружен. Пожалуйста, попробуйте позже.
                         </p>
 
-                        {/* Дополнительная информация */}
                         <div className="flex items-center justify-center gap-3 max-w-[560px] bg-[rgba(20,20,30,0.45)] backdrop-blur-[12px] rounded-2xl border border-white/10 px-6! py-4! animate-[serverUnavailableFadeIn_0.6s_ease-out_both]">
                             <svg
                                 width="20"

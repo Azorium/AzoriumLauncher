@@ -72,13 +72,11 @@ export default function AuthPage() {
         <>
             <div className="w-full h-full flex items-center justify-center">
                 <div className="mb-7! w-full max-w-[480px] bg-[rgba(20,20,30,0.55)] backdrop-blur-[12px] rounded-3xl border border-white/10 p-10! shadow-[0_15px_35px_rgba(0,0,0,0.2)] animate-[fadeIn_0.6s_ease-out]">
-                    {/* Заголовок формы */}
                     <div className="text-center mb-6!">
                         <h1 className="text-4xl font-bold text-white mb-1.5! tracking-[-0.5px]">{projectName}</h1>
                         <p className="text-base font-normal text-white/50">Войдите в свой аккаунт</p>
                     </div>
 
-                    {/* Форма */}
                     <form className="flex flex-col gap-[18px]">
                         <div className="flex flex-col gap-2">
                             <input
@@ -123,7 +121,6 @@ export default function AuthPage() {
                         <div className="mt-[18px]! pt-[18px]! border-t border-white/10"></div>
                     </form>
 
-                    {/* Нижняя информация */}
                     <div className="mt-6! text-center text-xs text-white/40 leading-[1.4]">
                         <p>{projectName}Launcher • 2026</p>
                         <p>При появлении проблем пишите в Discord проекта</p>
