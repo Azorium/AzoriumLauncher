@@ -66,7 +66,7 @@ export default function RootLayout() {
                         {isRenderLogoutButton && user && (
                             <button
                                 onClick={handleLogout}
-                                className="cursor-pointer flex justify-center items-center"
+                                className="cursor-pointer transition-all flex justify-center items-center hover:scale-104 hover:opacity-97"
                                 title="Выйти из аккаунта"
                             >
                                 <img src={`/assets/images/icons/logout.svg`} alt="иконка" width={22} height={22} />
