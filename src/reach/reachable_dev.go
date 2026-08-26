@@ -7,7 +7,7 @@ import (
 )
 
 func CheckHostReachable() bool {
-	src.MainApiUrl = "http://localhost:8080"
+	src.LaunchServerApiUrl = "http://localhost:8080"
 
 	return true
 }
