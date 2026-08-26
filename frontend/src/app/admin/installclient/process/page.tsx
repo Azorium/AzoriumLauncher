@@ -16,7 +16,7 @@ export default function AdminInstallProcessPage() {
     const intervalRef = useRef<HTMLDivElement | null>(null);
 
     const location = useLocation();
-    const { emitterKey, clientName, mcVersion } = location.state;
+    const { clientName, mcVersion } = location.state;
     const { eventSource } = useSse();
 
     useEffect(() => {

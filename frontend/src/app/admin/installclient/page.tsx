@@ -82,7 +82,6 @@ export default function AdminInstallclientPage() {
                 if (req.ok) {
                     navigate('/admin/installclient/process', {
                         state: {
-                            emitterKey: emitterKey,
                             clientName: folderName,
                             mcVersion: gameVersion,
                         },
