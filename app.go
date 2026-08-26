@@ -2,6 +2,7 @@ package main
 
 import (
 	"azoriumlauncher/src"
+	"azoriumlauncher/src/reach"
 	"azoriumlauncher/src/service"
 	"azoriumlauncher/src/utils"
 	"context"
@@ -28,8 +29,9 @@ type App struct {
 }
 
 func NewApp() *App {
+	isReachableServer = reach.CheckHostReachable()
+	consts.LoadConsts()
 
-	isReachableServer = consts.LoadConsts()
 	if isReachableServer {
 		if update := launcherUpdateService.CheckNeedUpdate(); update {
 			isNeedUpdate = true

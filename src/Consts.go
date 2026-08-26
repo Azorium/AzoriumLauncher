@@ -6,7 +6,6 @@ import (
 	"path/filepath"
 	"runtime"
 	"strings"
-	"time"
 )
 
 type Consts struct{}
@@ -15,6 +14,9 @@ var ProjectName = "Azorium"
 
 // UserResourcesApiUrl Ссылка на API, которое выдаёт скин и плащ игрока
 var UserResourcesApiUrl = "http://localhost:3001"
+
+// LSApiUrls Массив с ссылками на LaunchServer, которые проверяются на доступность
+var LSApiUrls = []string{"launcher.projectname.ru"}
 
 var DownloadUrl string
 var ClientsUrl string
@@ -62,26 +64,7 @@ type UserType struct {
 	JWToken  string `json:"jwt_token"`
 }
 
-func (c *Consts) LoadConsts() bool {
-	// localhost должен быть в самом конце, это запасной вариант для разработки
-	apiUrls := []string{"launcher.projectname.ru", "localhost"}
-
-	for _, apiUrl := range apiUrls {
-		if isReachable := utils.IsReachableServer(apiUrl, 8080, 1*time.Second); isReachable {
-			if apiUrl == "localhost" {
-				LaunchServerApiUrl = "http://" + apiUrl + ":8080"
-				break
-			}
-
-			LaunchServerApiUrl = "https://" + apiUrl
-			break
-		}
-	}
-
-	if LaunchServerApiUrl == "" {
-		return false
-	}
-
+func (c *Consts) LoadConsts() {
 	if strings.Contains(runtime.GOOS, "win") {
 		FileExtension = ".exe"
 	}
@@ -136,6 +119,4 @@ func (c *Consts) LoadConsts() bool {
 		LauncherFileHash: launcherFileHash,
 		RuntimeZipHash:   runtimeZipHash,
 	}
-
-	return true
 }
