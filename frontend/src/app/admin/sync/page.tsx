@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import processingContext from '../../../js/utils/processingContext';
 import { HeaderContextType, NotificationItem } from '../../../js/Interfaces';
-import { NavLink, useNavigate, useOutletContext } from 'react-router';
+import { useNavigate, useOutletContext } from 'react-router';
 import { createPortal } from 'react-dom';
 import AdminSyncActionsModal from '../../../components/AdminSyncActionsModal';
 import { insertNotification, showNotification } from '../../../components/Notification';

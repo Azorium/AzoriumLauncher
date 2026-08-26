@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect } from 'react';
 import { EventsEmit, EventsOff, EventsOn } from '../../../wailsjs/runtime';
 import { FiCopy, FiXCircle } from 'react-icons/fi';
-import { useOutletContext, useSearchParams } from 'react-router';
+import { useOutletContext } from 'react-router';
 import { HeaderContextType } from '../../js/Interfaces';
 import processingContext from '../../js/utils/processingContext';
 

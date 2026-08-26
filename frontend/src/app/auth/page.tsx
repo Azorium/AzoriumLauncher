@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate, useOutletContext } from 'react-router';
 import { launchServerApiUrl, projectName } from '../../js/Consts';
 import { insertNotification, showNotification } from '../../components/Notification';
-import { HeaderContextType, NotificationItem, Settings } from '../../js/Interfaces';
+import { HeaderContextType, NotificationItem } from '../../js/Interfaces';
 import { checkFetch } from '../../js/utils/auth';
 import processingContext from '../../js/utils/processingContext';
 

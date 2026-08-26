@@ -3,9 +3,9 @@ import { useNavigate, useOutletContext, useSearchParams } from 'react-router';
 import { StartClientProcesses } from '../../../wailsjs/go/main/App';
 import { service } from '../../../wailsjs/go/models';
 import { EventsOff, EventsOn } from '../../../wailsjs/runtime';
-import Profile = service.Profile;
 import { HeaderContextType } from '../../js/Interfaces';
 import processingContext from '../../js/utils/processingContext';
+import Profile = service.Profile;
 
 export default function ClientstartPage() {
     const [searchParams] = useSearchParams();

@@ -1,4 +1,4 @@
-import { userResourcesApiUrl, launchServerApiUrl } from '../Consts';
+import { launchServerApiUrl, userResourcesApiUrl } from '../Consts';
 import { SetUser } from '../../../wailsjs/go/main/App';
 import { src } from '../../../wailsjs/go/models';
 import { User } from '../Interfaces';

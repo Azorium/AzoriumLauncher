@@ -1,4 +1,3 @@
-import { NavLink, Outlet } from 'react-router';
 import { Quit, WindowMinimise } from '../../../wailsjs/runtime';
 import React, { ReactElement } from 'react';
 

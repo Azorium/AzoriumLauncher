@@ -1,4 +1,4 @@
-import { Outlet, useNavigate, useOutletContext } from 'react-router';
+import { useNavigate, useOutletContext } from 'react-router';
 import { HeaderContextType, NotificationItem } from '../../../js/Interfaces';
 import { useEffect, useRef, useState } from 'react';
 import processingContext from '../../../js/utils/processingContext';

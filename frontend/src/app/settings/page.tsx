@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { useNavigate, useOutletContext } from 'react-router';
+import { useOutletContext } from 'react-router';
 import { HeaderContextType, NotificationItem, Settings } from '../../js/Interfaces';
 import { OpenLauncherRootFolder, SaveSettings } from '../../../wailsjs/go/main/App';
 import { service } from '../../../wailsjs/go/models';
 import { insertNotification } from '../../components/Notification';
-import SettingsObj = service.SettingsObj;
 import processingContext from '../../js/utils/processingContext';
+import SettingsObj = service.SettingsObj;
 
 export default function SettingsPage() {
     const headerContext = useOutletContext<HeaderContextType>();
