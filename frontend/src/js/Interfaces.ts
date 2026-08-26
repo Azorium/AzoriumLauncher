@@ -1,9 +1,16 @@
 import { service } from '../../wailsjs/go/models';
+import React from 'react';
 import SettingsObj = service.SettingsObj;
 import Mod = service.Mod;
-import React from 'react';
 
 export {};
+
+export type InitialInfo = {
+    startPage: string;
+    projectName: string;
+    launchServerApiUrl: string;
+    userResourcesApiUrl: string;
+};
 
 export interface User {
     username: string;

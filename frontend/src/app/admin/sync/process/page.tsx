@@ -6,7 +6,7 @@ import { ActionType } from '../page';
 import CircleSpinner from '../../../../components/CircleSpinner';
 import { useSse } from '../../../../components/SseProvider';
 import { sseCompleteEvent, sseConnect } from '../../../../js/utils/sse';
-import { LAUNCHER_URL } from '../../../../js/appConsts';
+import { launchServerApiUrl } from '../../../../js/Consts';
 
 export default function AdminSyncProcessPage() {
     const headerContext = useOutletContext<HeaderContextType>();
@@ -27,7 +27,7 @@ export default function AdminSyncProcessPage() {
             };
 
             const sync = async () => {
-                const req = await fetch(`${LAUNCHER_URL}/admin/sync`, {
+                const req = await fetch(`${launchServerApiUrl}/admin/sync`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',

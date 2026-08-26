@@ -1,8 +1,8 @@
-import { LAUNCHER_URL } from '../appConsts';
+import { launchServerApiUrl } from '../Consts';
 
 export const sseConnect = (): Promise<{ emitterKey: number; eventSource: EventSource }> => {
     return new Promise((resolve, reject) => {
-        const eventSource = new EventSource(`${LAUNCHER_URL}/sse/connect`);
+        const eventSource = new EventSource(`${launchServerApiUrl}/sse/connect`);
 
         eventSource.onmessage = (ev) => {
             resolve({

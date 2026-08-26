@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate, useOutletContext } from 'react-router';
-import { LAUNCHER_URL } from '../../js/appConsts';
+import { launchServerApiUrl, projectName } from '../../js/Consts';
 import { insertNotification, showNotification } from '../../components/Notification';
 import { HeaderContextType, NotificationItem, Settings } from '../../js/Interfaces';
 import { checkFetch } from '../../js/utils/auth';
@@ -35,7 +35,7 @@ export default function AuthPage() {
         if (formData.username && formData.password) {
             setIsLoading(true);
             try {
-                const loginFetch = await fetch(`${LAUNCHER_URL}/api/auth/launcher/login`, {
+                const loginFetch = await fetch(`${launchServerApiUrl}/api/auth/launcher/login`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -74,9 +74,7 @@ export default function AuthPage() {
                 <div className="mb-7! w-full max-w-[480px] bg-[rgba(20,20,30,0.55)] backdrop-blur-[12px] rounded-3xl border border-white/10 p-10! shadow-[0_15px_35px_rgba(0,0,0,0.2)] animate-[fadeIn_0.6s_ease-out]">
                     {/* Заголовок формы */}
                     <div className="text-center mb-6!">
-                        <h1 className="text-4xl font-bold text-white mb-1.5! tracking-[-0.5px]">
-                            {window.projectName}
-                        </h1>
+                        <h1 className="text-4xl font-bold text-white mb-1.5! tracking-[-0.5px]">{projectName}</h1>
                         <p className="text-base font-normal text-white/50">Войдите в свой аккаунт</p>
                     </div>
 
@@ -127,7 +125,7 @@ export default function AuthPage() {
 
                     {/* Нижняя информация */}
                     <div className="mt-6! text-center text-xs text-white/40 leading-[1.4]">
-                        <p>{window.projectName}Launcher • 2026</p>
+                        <p>{projectName}Launcher • 2026</p>
                         <p>При появлении проблем пишите в Discord проекта</p>
                     </div>
                 </div>

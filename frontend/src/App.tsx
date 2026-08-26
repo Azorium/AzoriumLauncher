@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { GetProfiles, GetProjectName, GetRootPath, GetSettings, SaveSettings } from '../wailsjs/go/main/App';
+import { GetProfiles, GetRootPath, GetSettings, SaveSettings } from '../wailsjs/go/main/App';
 import { Profiles, ProfileSettings } from './js/Interfaces';
 import { service } from '../wailsjs/go/models';
 import { BrowserRouter } from 'react-router';
@@ -16,7 +16,6 @@ const App = () => {
         GetRootPath().then((path) => {
             window.rootPath = path;
         });
-        GetProjectName().then((projectName) => (window.projectName = projectName));
 
         GetProfiles()
             .then((profiles) => {

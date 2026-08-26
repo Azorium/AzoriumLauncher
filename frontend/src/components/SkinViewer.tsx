@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from 'react';
-import { API_URL } from '../js/appConsts';
+import { userResourcesApiUrl } from '../js/Consts';
 import * as skinview3d from 'skinview3d';
 import { User } from '../js/Interfaces';
 
@@ -52,7 +52,7 @@ export const SkinViewer = () => {
 
         const loadCape = async () => {
             try {
-                let res = await fetch(`${API_URL}/uploads/capes/${user.capeHash}.png`);
+                let res = await fetch(`${userResourcesApiUrl}/uploads/capes/${user.capeHash}.png`);
 
                 if (res.ok && viewer) viewer.loadCape(res.url).then();
             } catch (err) {

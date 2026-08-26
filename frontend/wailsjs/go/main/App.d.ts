@@ -3,15 +3,13 @@
 import {service} from '../models';
 import {src} from '../models';
 
-export function GetProfiles():Promise<Array<Record<string, any>>>;
+export function GetInitialInfo():Promise<any>;
 
-export function GetProjectName():Promise<string>;
+export function GetProfiles():Promise<Array<Record<string, any>>>;
 
 export function GetRootPath():Promise<string>;
 
 export function GetSettings():Promise<any>;
-
-export function GetStartPage():Promise<string>;
 
 export function LauncherUpdateGO():Promise<void>;
 

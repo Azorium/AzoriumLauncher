@@ -12,6 +12,10 @@ import (
 type Consts struct{}
 
 var ProjectName = "Azorium"
+
+// UserResourcesApiUrl Ссылка на API, которое выдаёт скин и плащ игрока
+var UserResourcesApiUrl = "http://localhost:3001"
+
 var DownloadUrl string
 var ClientsUrl string
 var AssetsUrl string
@@ -23,6 +27,7 @@ var GameFilesUpdateUrl string
 var LauncherUpdateUrl string
 var LauncherCheckUpdateUrl string
 var YggdrasilApiUrl string
+var LaunchServerApiUrl string
 
 var RootPath string
 var TmpPath string
@@ -58,23 +63,22 @@ type UserType struct {
 }
 
 func (c *Consts) LoadConsts() bool {
-	var mainApiUrl string
 	// localhost должен быть в самом конце, это запасной вариант для разработки
-	apiUrls := []string{"launcher.notex.su", "localhost"}
+	apiUrls := []string{"launcher.projectname.ru", "localhost"}
 
 	for _, apiUrl := range apiUrls {
 		if isReachable := utils.IsReachableServer(apiUrl, 8080, 1*time.Second); isReachable {
 			if apiUrl == "localhost" {
-				mainApiUrl = "http://" + apiUrl + ":8080"
+				LaunchServerApiUrl = "http://" + apiUrl + ":8080"
 				break
 			}
 
-			mainApiUrl = "https://" + apiUrl
+			LaunchServerApiUrl = "https://" + apiUrl
 			break
 		}
 	}
 
-	if mainApiUrl == "" {
+	if LaunchServerApiUrl == "" {
 		return false
 	}
 
@@ -82,17 +86,17 @@ func (c *Consts) LoadConsts() bool {
 		FileExtension = ".exe"
 	}
 
-	DownloadUrl = mainApiUrl + "/download/"
-	ClientsUrl = mainApiUrl + "/download/client/cached"
-	AssetsUrl = mainApiUrl + "/download/caches/assets/"
-	JavaUrl = mainApiUrl + "/download/updates/java/"
+	DownloadUrl = LaunchServerApiUrl + "/download/"
+	ClientsUrl = LaunchServerApiUrl + "/download/client/cached"
+	AssetsUrl = LaunchServerApiUrl + "/download/caches/assets/"
+	JavaUrl = LaunchServerApiUrl + "/download/updates/java/"
 	LauncherComponentsUrl = DownloadUrl + "updates/launcher/components/"
-	AuthlibUrl = mainApiUrl + "/update/authlib"
-	GameFilesUpdateUrl = mainApiUrl + "/update/game_files"
-	LauncherUpdateUrl = mainApiUrl + "/update/launcher"
-	LauncherGuardUrl = mainApiUrl + "/update/launcheguard"
-	LauncherCheckUpdateUrl = mainApiUrl + "/update/launcher/check"
-	YggdrasilApiUrl = mainApiUrl + "/api/auth/yggdrasil"
+	AuthlibUrl = LaunchServerApiUrl + "/update/authlib"
+	GameFilesUpdateUrl = LaunchServerApiUrl + "/update/game_files"
+	LauncherUpdateUrl = LaunchServerApiUrl + "/update/launcher"
+	LauncherGuardUrl = LaunchServerApiUrl + "/update/launcheguard"
+	LauncherCheckUpdateUrl = LaunchServerApiUrl + "/update/launcher/check"
+	YggdrasilApiUrl = LaunchServerApiUrl + "/api/auth/yggdrasil"
 
 	var osUtils = utils.SystemUtils{}
 	var hashUtils = utils.HashUtils{}

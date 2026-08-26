@@ -77,12 +77,20 @@ func (a *App) startup(ctx context.Context) {
 	}
 }
 
-func (a *App) GetStartPage() string {
-	return StartPage
-}
+func (a *App) GetInitialInfo() interface{} {
+	var info = struct {
+		StartPage           string `json:"startPage"`
+		ProjectName         string `json:"projectName"`
+		LaunchServerApiUrl  string `json:"launchServerApiUrl"`
+		UserResourcesApiUrl string `json:"userResourcesApiUrl"`
+	}{
+		StartPage:           StartPage,
+		ProjectName:         src.ProjectName,
+		LaunchServerApiUrl:  src.LaunchServerApiUrl,
+		UserResourcesApiUrl: src.UserResourcesApiUrl,
+	}
 
-func (a *App) GetProjectName() string {
-	return src.ProjectName
+	return info
 }
 
 func (a *App) OpenLauncherRootFolder() error {

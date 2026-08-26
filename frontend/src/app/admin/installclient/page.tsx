@@ -2,7 +2,7 @@ import { Outlet, useNavigate, useOutletContext } from 'react-router';
 import { HeaderContextType, NotificationItem } from '../../../js/Interfaces';
 import { useEffect, useRef, useState } from 'react';
 import processingContext from '../../../js/utils/processingContext';
-import { LAUNCHER_URL } from '../../../js/appConsts';
+import { launchServerApiUrl } from '../../../js/Consts';
 import { insertNotification, showNotification } from '../../../components/Notification';
 import { sseCompleteEvent, sseConnect } from '../../../js/utils/sse';
 import { useSse } from '../../../components/SseProvider';
@@ -63,7 +63,7 @@ export default function AdminInstallclientPage() {
             };
 
             const installclient = async () => {
-                const req = await fetch(`${LAUNCHER_URL}/admin/installclient`, {
+                const req = await fetch(`${launchServerApiUrl}/admin/installclient`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
