@@ -1,10 +1,9 @@
 import { useLocation, useNavigate, useOutletContext } from 'react-router';
-import { EventMessageType, HeaderContextType } from '../../../../js/Interfaces';
+import { ActionType, EventMessageType, HeaderContextType } from '../../../../js/Interfaces';
 import React, { useEffect, useRef, useState } from 'react';
 import processingContext from '../../../../js/utils/processingContext';
 import { useSse } from '../../../../components/SseProvider';
 import { sseCompleteEvent } from '../../../../js/utils/sse';
-import { ActionType } from '../../sync/page';
 
 export default function AdminInstallProcessPage() {
     const headerContext = useOutletContext<HeaderContextType>();

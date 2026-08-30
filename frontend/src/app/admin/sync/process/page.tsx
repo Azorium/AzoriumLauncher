@@ -1,8 +1,7 @@
 import { NavLink, useLocation, useNavigate, useOutletContext } from 'react-router';
-import { HeaderContextType } from '../../../../js/Interfaces';
+import { ActionType, HeaderContextType } from '../../../../js/Interfaces';
 import { useEffect, useState } from 'react';
 import processingContext from '../../../../js/utils/processingContext';
-import { ActionType } from '../page';
 import CircleSpinner from '../../../../components/CircleSpinner';
 import { useSse } from '../../../../components/SseProvider';
 import { sseCompleteEvent, sseConnect } from '../../../../js/utils/sse';

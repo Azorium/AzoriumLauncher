@@ -1,17 +1,10 @@
 import { useEffect, useState } from 'react';
 import processingContext from '../../../js/utils/processingContext';
-import { HeaderContextType, NotificationItem } from '../../../js/Interfaces';
+import { ActionType, HeaderContextType, NotificationItem } from '../../../js/Interfaces';
 import { useNavigate, useOutletContext } from 'react-router';
 import { createPortal } from 'react-dom';
 import AdminSyncActionsModal from '../../../components/AdminSyncActionsModal';
 import { insertNotification, showNotification } from '../../../components/Notification';
-
-export type ActionType = {
-    name: string;
-    title: string;
-    value: null | string;
-    redirect?: ActionType;
-};
 
 export default function AdminSyncPage() {
     const profiles = window.profiles.map((profile) => ({

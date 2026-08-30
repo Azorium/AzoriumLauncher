@@ -12,6 +12,13 @@ export type InitialInfo = {
     userResourcesApiUrl: string;
 };
 
+export type ActionType = {
+    name: string;
+    title: string;
+    value: null | string;
+    redirect?: ActionType;
+};
+
 export interface User {
     username: string;
     uuid: string;
