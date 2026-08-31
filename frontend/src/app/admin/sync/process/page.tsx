@@ -82,7 +82,7 @@ export default function AdminSyncProcessPage() {
 
                                 <NavLink
                                     to={'/'}
-                                    state={{ isReload: true }}
+                                    state={state.name == 'profiles' ? { isReload: true } : null}
                                     className="bg-gradient-to-br from-[#0984e3] to-[#5ebaef] border-0 rounded-xl p-[15px]! text-[0.9rem] font-semibold cursor-pointer transition-all
                              duration-300 tracking-[0.5px]  hover:-translate-y-0.5 hover:shadow-[0_8px_20px_rgba(9,132,227,0.3)] mt-25!"
                                 >
