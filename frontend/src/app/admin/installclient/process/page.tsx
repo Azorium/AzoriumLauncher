@@ -45,7 +45,12 @@ export default function AdminInstallProcessPage() {
                     name: 'client',
                     title: 'Клиент',
                     value: clientName,
-                    redirect: { name: 'asset', title: 'Ассеты', value: mcVersion },
+                    redirect: {
+                        name: 'asset',
+                        title: 'Ассеты',
+                        value: mcVersion,
+                        redirect: { name: 'profiles', title: 'Профили' },
+                    },
                 } as ActionType,
             });
         });
