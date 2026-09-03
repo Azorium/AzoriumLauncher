@@ -13,7 +13,6 @@ export default function RootPage() {
     const headerContext = useOutletContext<HeaderContextType>();
     const [selectedImg, setSelectedImg] = useState(window.settings.startCardPage);
     const images = ['sky.jpg', 'beach.png', 'island.jpg'];
-    const [isShow, setIsShow] = useState(false);
     const location = useLocation();
     const state: { isReload: boolean | null } | null = location.state;
 
@@ -27,7 +26,6 @@ export default function RootPage() {
             navigate('/servers', { replace: true });
         } else {
             processingContext(headerContext, 'root');
-            setIsShow(true);
         }
     }, []);
 
@@ -38,7 +36,7 @@ export default function RootPage() {
         }
     }, [selectedImg]);
 
-    if (!isShow) return null;
+    if (!user) return null;
 
     return (
         <div className="w-full h-full flex justify-center items-center">

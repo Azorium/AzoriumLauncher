@@ -11,7 +11,7 @@ import { createPortal } from 'react-dom';
 
 export default function AdminInstallclientPage() {
     const headerContext = useOutletContext<HeaderContextType>();
-    const loaders = ['fabric', 'forge', 'neoforge'];
+    const loaders = ['fabric', 'forge', 'neoforge', 'vanilla'];
     const [notifications, setNotifications] = useState<NotificationItem[]>([]);
     const navigate = useNavigate();
 
@@ -26,6 +26,12 @@ export default function AdminInstallclientPage() {
     useEffect(() => {
         processingContext(headerContext, 'admin_pages');
     }, []);
+
+    useEffect(() => {
+        if (loader == 'vanilla') {
+            setLoaderVersion('');
+        }
+    }, [loader]);
 
     useEffect(() => {
         const handleClickOutside = (event: MouseEvent) => {
@@ -46,7 +52,7 @@ export default function AdminInstallclientPage() {
     };
 
     const handleInstall = () => {
-        if (gameVersion.length == 0 || folderName.length == 0 || loaderVersion.length == 0) {
+        if (gameVersion.length == 0 || folderName.length == 0 || (loaderVersion.length == 0 && loader != 'vanilla')) {
             showNotification('error', `Все поля должны быть заполнены.`, setNotifications);
             return;
         }
@@ -181,12 +187,15 @@ export default function AdminInstallclientPage() {
                             Версия загрузчика
                         </label>
                         <input
+                            disabled={loader == 'vanilla'}
                             id="loaderVersion"
                             type="text"
-                            value={loaderVersion}
+                            value={loader == 'vanilla' ? '' : loaderVersion}
                             onChange={(e) => setLoaderVersion(e.target.value)}
                             placeholder="Введите версию загрузчика"
-                            className="px-[16px]! py-[12px]! border border-white/15 rounded-xl text-[15px] text-white bg-white/10 placeholder:text-white/40 transition-all duration-300 focus:outline-none focus:border-[#5ebaef] focus:shadow-[0_0_0_3px_rgba(94,186,239,0.15)]"
+                            className={`${loader == 'vanilla' ? 'cursor-not-allowed bg-black/20! blur-[1.5px]' : ''} px-[16px]! py-[12px]! border border-white/15 rounded-xl text-[15px] text-white 
+                            bg-white/10 placeholder:text-white/40 transition-all duration-300 focus:outline-none 
+                            focus:border-[#5ebaef] focus:shadow-[0_0_0_3px_rgba(94,186,239,0.15)]`}
                         />
                     </div>
                 </div>
