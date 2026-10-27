@@ -469,18 +469,10 @@ func (c *ClientProcessesService) MinecraftStart(ctx context.Context) {
 	var replacedGameArgsArray []string
 	json.Unmarshal(gameArgsRaw, &gameArgsUnidentified)
 
-	var argsArray []string
+	var argsArray = make([]string, len(gameArgsUnidentified))
 
-	for _, el := range gameArgsUnidentified {
-		if len(gameArgsUnidentified) == 1 {
-			argsArray = strings.Split(el, " ")
-			replacedGameArgsArray = make([]string, len(argsArray))
-		} else {
-			argsArray = make([]string, len(gameArgsUnidentified))
-			for i, item := range gameArgsUnidentified {
-				argsArray[i] = item
-			}
-		}
+	for i, item := range gameArgsUnidentified {
+		argsArray[i] = item
 	}
 
 	replacedGameArgsArray = make([]string, len(argsArray))
