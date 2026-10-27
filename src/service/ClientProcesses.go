@@ -465,20 +465,20 @@ func (c *ClientProcessesService) MinecraftStart(ctx context.Context) {
 	gameArgsValues["${auth_xuid}"] = "1"
 
 	gameArgsRaw := c.Profile.Backend.Arguments.Game
-	var gameArgsUnidentified interface{}
+	var gameArgsUnidentified []string
 	var replacedGameArgsArray []string
 	json.Unmarshal(gameArgsRaw, &gameArgsUnidentified)
 
 	var argsArray []string
-	switch v := gameArgsUnidentified.(type) {
-	case string:
-		argsArray = strings.Split(gameArgsUnidentified.(string), " ")
-		replacedGameArgsArray = make([]string, len(v))
-	case []interface{}:
-		argsArray = make([]string, len(v))
-		for i, item := range v {
-			if s, ok := item.(string); ok {
-				argsArray[i] = s
+
+	for _, el := range gameArgsUnidentified {
+		if len(gameArgsUnidentified) == 1 {
+			argsArray = strings.Split(el, " ")
+			replacedGameArgsArray = make([]string, len(argsArray))
+		} else {
+			argsArray = make([]string, len(gameArgsUnidentified))
+			for i, item := range gameArgsUnidentified {
+				argsArray[i] = item
 			}
 		}
 	}
