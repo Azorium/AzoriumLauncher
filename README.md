@@ -1,19 +1,12 @@
-# README
+# AzoriumLauncher  
+Feature-rich launcher for Minecraft server networks. Built with Go (Wails v2), TypeScript (React).
 
-## About
+### WIP Status
+This project is currently in active development. Full documentation will be available upon release.
 
-This is the official Wails React-TS template.
+## License
 
-You can configure the project by editing `wails.json`. More information about the project settings can be found
-here: https://wails.io/docs/reference/project-config
+Copyright (C) 2026 Sergey Raevsky (Azorium)
 
-## Live Development
-
-To run in live development mode, run `wails dev` in the project directory. This will run a Vite development
-server that will provide very fast hot reload of your frontend changes. If you want to develop in a browser
-and have access to your Go methods, there is also a dev server that runs on http://localhost:34115. Connect
-to this in your browser, and you can call your Go code from devtools.
-
-## Building
-
-To build a redistributable, production mode package, use `wails build`.
+This project is licensed under the GNU Affero General Public License v3.0 (AGPL-3.0). 
+See the [LICENSE](LICENSE) file for details.
